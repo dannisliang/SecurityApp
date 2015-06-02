@@ -1,27 +1,18 @@
+/*
+App
+=============
+This component handles the main skeleton app structure (header, content, footer)
+*/
 import React, {PropTypes} from 'react';
-import TaskList from './TaskList.jsx';
+import ContentRouter from './ContentRouter.jsx';
+import Navigation from './Navigation.jsx';
 
 export default React.createClass({
-  propTypes: {
-    tasks: PropTypes.array.isRequired,
-    onAddTask: PropTypes.func.isRequired,
-    onClear: PropTypes.func.isRequired
-  },
-
-  getDefaultProps() {
-    return {
-      tasks: []
-    }
-  },
-
-  render() {
-    let {onAddTask, onClear, tasks} = this.props;
+  render: function () {
     return (
       <div>
-        <h1>Learn Flux</h1>
-        <TaskList tasks={tasks} />
-        <button onClick={onAddTask}>Add New</button>
-        <button onClick={onClear}>Clear List</button>
+        <Navigation/>
+        <ContentRouter/>
       </div>
     );
   }

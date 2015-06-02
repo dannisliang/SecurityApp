@@ -6,7 +6,7 @@ module.exports = {
   server: {
     settings: {
       root: dest,
-      host: 'localhost',
+      host: 'local.securityapp.com',
       port: 8080,
       livereload: {
         port: 35929
