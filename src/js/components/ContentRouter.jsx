@@ -30,7 +30,6 @@ export default React.createClass({
 document.addEventListener("DOMContentLoaded", function(event) {
 	var routes = (
 	  <Route name="app" path="/" handler={App}>
-	    <Route name="home" handler={Home}/>
 	    <Route name="arm" handler={Arm}/>
 	    <Route name="images" handler={Images}/>
 	    <DefaultRoute handler={Home}/>

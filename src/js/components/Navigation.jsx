@@ -12,7 +12,7 @@ export default React.createClass({
   render: function() {
     return (
       <header>
-        <Link to="home">Home</Link>
+        <Link to="app">Home</Link>
         <Link to="arm">Arm</Link>
         <Link to="images">Images</Link>
       </header>
