@@ -1,6 +1,5 @@
 import React from 'react';
 import Video from './Video.jsx';
-import Motion from './Motion.jsx';
 
 export default React.createClass({
 	render: function() {
