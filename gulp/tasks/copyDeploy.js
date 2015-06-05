@@ -4,7 +4,5 @@ var errorHandler = config.errorHandler;
 config = config.copyDeploy;
 
 gulp.task('copyDeploy', function() {
-	for(var i=0, l=config.length; i<l; i++) {
-		gulp.src(config[i].src).pipe(gulp.dest(config[i].dest)).on('error',errorHandler);
-	}
+	gulp.src(config.src).pipe(gulp.dest(config.dest)).on('error',errorHandler);
 });

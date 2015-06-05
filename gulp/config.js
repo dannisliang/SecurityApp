@@ -32,27 +32,33 @@ module.exports = {
     outputName : 'index.js',
     debug      : gutil.env.type === 'dev'
   },
-  html: {
-    src  : 'src/index.html',
-    dest : local
-  },
   watch: {
     src   : 'src/**/*.*',
     tasks : ['build']
   },
-  copyLocal: [
-    {src: src + '/.htaccess', dest: local}
-  ],
-  copyDeploy: [
-    {src: src + '/.htaccess', dest: deploy},
-    {src: local + '/index.html', dest: deploy}
-  ],
+  copyLocal: {
+    src: [
+      src + '/.htaccess',
+      src + '/index.html'
+    ],
+    dest: local
+  },
+  copyDeploy: {
+    src: [
+      src + '/.htaccess'
+    ],
+    dest: deploy
+  },
   deploy: {
     src  : src + '/**',
     dest : deploy,
     uglify: {
       src  : local + '/js/**',
       dest : deploy + '/js'
+    },
+    htmlmin: {
+      src: local + '/*.html',
+      dest: deploy
     },
     rsync: {
       destination : '/home/180199/domains/securityapp.justin-schrader.com/html',
