@@ -2,5 +2,7 @@ var gulp = require('gulp');
 var runSequence = require('run-sequence');
 
 gulp.task('deploy', function() {
-	runSequence('build', 'rsync');
+	return runSequence('build', 'copyDeploy', 'uglify', 'rsync', function(){
+		// TODO: this process handgs after rsync for some reason
+	});
 });

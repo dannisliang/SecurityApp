@@ -5,5 +5,5 @@ var errorHandler = config.errorHandler;
 config = config.deploy.rsync;
 
 gulp.task('rsync', function() {
-	gulp.src(config.root).pipe(rsync(config)).on('error',errorHandler);
+	gulp.src(config.src).pipe(rsync(config)).on('error',errorHandler);
 });

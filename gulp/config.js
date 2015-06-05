@@ -40,24 +40,30 @@ module.exports = {
     src   : 'src/**/*.*',
     tasks : ['build']
   },
-  copy: {
-    src  : src + '/.htaccess',
-    dest : [local, deploy]
-  },
+  copyLocal: [
+    {src: src + '/.htaccess', dest: local}
+  ],
+  copyDeploy: [
+    {src: src + '/.htaccess', dest: deploy},
+    {src: local + '/index.html', dest: deploy}
+  ],
   deploy: {
     src  : src + '/**',
     dest : deploy,
+    uglify: {
+      src  : local + '/js/**',
+      dest : deploy + '/js'
+    },
     rsync: {
       destination : '/home/180199/domains/securityapp.justin-schrader.com/html',
+      src         : [deploy + '/**', deploy + '/.htaccess'],
       root        : deploy,
       hostname    : 's180199.gridserver.com',
       username    : 'justin-schrader.com',
-      progress    : true  // handy for debugging what is being deployed
+      progress    : false  // handy for debugging what is being deployed
     }
   },
-  clean: [
-    local, deploy
-  ],
+  clean: deploy,
   errorHandler: function(error) {
     console.log(error.toString());
     this.emit('end');
