@@ -1,41 +1,65 @@
-var dest = './dist';
-var src = './src';
-var gutil = require('gulp-util');
+var src    = './src',       // raw files to edit
+    local  = './local',     // local dev folder (compiled but not concat or minified)
+    deploy = './deploy',    // minified and concat files for deploy
+    gutil  = require('gulp-util');
 
 module.exports = {
   server: {
     settings: {
-      root: dest,
-      host: 'local.securityapp.com',
-      port: 8080,
+      root     : local,
+      host     : 'local.securityapp.com',
+      port     : 8080,
+      fallback : 'src/index.html',  // needed for html5 pushstate
       livereload: {
         port: 35929
       }
     }
   },
   sass: {
-    src: src + '/styles/**/*.{sass,scss,css}',
-    dest: dest + '/styles',
+    src  : src + '/styles/**/*.{sass,scss,css}',
+    dest : local + '/styles',
     settings: {
-      indentedSyntax: false, // Enable .sass syntax?
-      imagePath: '/images' // Used by the image-url helper
+      indentedSyntax : false, // Enable .sass syntax?
+      imagePath      : '/images' // Used by the image-url helper
     }
   },
   browserify: {
     settings: {
       transform: ['babelify', 'reactify']
     },
-    src: src + '/js/index.jsx',
-    dest: dest + '/js',
-    outputName: 'index.js',
-    debug: gutil.env.type === 'dev'
+    src        : src + '/js/index.jsx',
+    dest       : local + '/js',
+    outputName : 'index.js',
+    debug      : gutil.env.type === 'dev'
   },
   html: {
-    src: 'src/index.html',
-    dest: dest
+    src  : 'src/index.html',
+    dest : local
   },
   watch: {
-    src: 'src/**/*.*',
-    tasks: ['build']
+    src   : 'src/**/*.*',
+    tasks : ['build']
+  },
+  copy: {
+    src  : src + '/.htaccess',
+    dest : [local, deploy]
+  },
+  deploy: {
+    src  : src + '/**',
+    dest : deploy,
+    rsync: {
+      destination : '/home/180199/domains/securityapp.justin-schrader.com/html',
+      root        : deploy,
+      hostname    : 's180199.gridserver.com',
+      username    : 'justin-schrader.com',
+      progress    : true  // handy for debugging what is being deployed
+    }
+  },
+  clean: [
+    local, deploy
+  ],
+  errorHandler: function(error) {
+    console.log(error.toString());
+    this.emit('end');
   }
 };

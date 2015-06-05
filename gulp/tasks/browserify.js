@@ -5,7 +5,9 @@ var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var connect = require('gulp-connect');
-var config = require('../config').browserify;
+var config = require('../config');
+var errorHandler = config.errorHandler;
+config = config.browserify;
 
 watchify.args.debug = config.debug;
 var bundler = watchify(browserify(config.src, watchify.args));
@@ -20,7 +22,7 @@ function bundle() {
   return bundler.bundle()
   // log errors if they happen
   .on('error', gutil.log.bind(gutil, 'Browserify Error'))
-  .pipe(source(config.outputName))
-  .pipe(gulp.dest(config.dest))
-  .pipe(connect.reload());
+  .pipe(source(config.outputName)).on('error',errorHandler)
+  .pipe(gulp.dest(config.dest)).on('error',errorHandler)
+  .pipe(connect.reload()).on('error',errorHandler);
 }
