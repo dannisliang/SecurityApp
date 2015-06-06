@@ -5,10 +5,10 @@ import assign from 'object-assign';
 
 // data storage
 let _data = {
-	isPlaying: false
+
 };
 
-const VideoStore = assign({}, BaseStore, {
+const MotionStore = assign({}, BaseStore, {
 	// public methods used by Controller-View to operate on data
 	getAll: function() {
 		return _data;
@@ -19,15 +19,19 @@ const VideoStore = assign({}, BaseStore, {
 		switch(action.type) {
 			case Constants.ActionTypes.ADD_VIDEO_SRC:
 				_data.src = action.src;  // set webcam src
-				VideoStore.emitChange();
-				if(!_data.isPlaying) {
-					VideoStore.emit(Constants.VIDEO_PLAY_EVENT);  // send separate event so components know they should start auto-playing the video
-				}
+				MotionStore.emitChange();
 				break;
 			case Constants.ActionTypes.ADD_VIDEO_SRC_ERROR:
 				// TODO
 				break;
+			case Constants.ActionTypes.START_VIDEO:
+				_data.startVideo = true;
+				MotionStore.emitChange();
+				break;
+			case Constants.ActionTypes.CAPTURE:
+				//VideoStore.emit(Constants.CAPTURE);
+				break;
 		}
 	})
 });
-export default VideoStore;
+export default MotionStore;

@@ -17,5 +17,20 @@ export default {
 				});
 			};
 		Core.getWebcamSrc(onSuccess, onError);
+	},
+	startVideo: function() {
+		Dispatcher.handleViewAction({
+			type: Constants.ActionTypes.START_VIDEO
+		});
+	},
+	startMotion: function() {
+		Dispatcher.handleViewAction({
+			type: Constants.ActionTypes.START_MOTION
+		});
+	},
+	capture: function() {
+		Dispatcher.handleViewAction({
+			type: Constants.ActionTypes.CAPTURE
+		});
 	}
 };
