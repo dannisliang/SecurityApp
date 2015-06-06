@@ -1,11 +1,17 @@
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
+/*
+browserify.js
+=============
+This task handles initiating module loading & dependencies.
+See browserify website for more info.
+*/
+var gulp       = require('gulp');
+var gutil      = require('gulp-util');
+var source     = require('vinyl-source-stream');
+var buffer     = require('vinyl-buffer');
 var browserify = require('browserify');
-var watchify = require('watchify');
-var connect = require('gulp-connect');
-var config = require('../config');
+var watchify   = require('watchify');
+var connect    = require('gulp-connect');
+var config     = require('../config');
 var errorHandler = config.errorHandler;
 config = config.browserify;
 

@@ -1,8 +1,10 @@
 @import "./normalize.css";
+@import "compass/css3/transition";
 
 $primary-color: green;
 
 h1 {
+	@include transition(height 0.5s linear);
   color: $primary-color;
 }
 
