@@ -10,7 +10,8 @@ export default {
   // action types - used by stores to know when to set data
   ActionTypes: keyMirror({
     ADD_VIDEO_SRC: null,
-    ADD_VIDEO_SRC_ERROR: null
+    ADD_VIDEO_SRC_ERROR: null,
+    ADD_FRAME: null
   }),
   ActionSources: keyMirror({
     SERVER_ACTION: null,
