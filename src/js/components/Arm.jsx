@@ -1,37 +1,42 @@
 import React from 'react';
 import Video from './Video.jsx';
 import Motion from './Motion.jsx';
-import MotionStore from '../stores/MotionStore';
-import VideoActionCreator from '../actions/VideoActionCreator';
+import WebcamMotionStore from '../stores/WebcamMotionStore';
+import WebcamMotionActionCreator from '../actions/WebcamMotionActionCreator';
 
 export default React.createClass({
 	// EVENT HANDLERS ////////////////////////
 	_onChange: function() {
-		this.setState(MotionStore.getAll());
+		this.setState(WebcamMotionStore.getAll());
 	},
 	// INITIAL STATE ////////////////////////
 	getInitialState: function() {
-		return MotionStore.getAll();
+		return {};
 	},
 	// LIFECYCLE ////////////////////////////
 	componentDidMount: function() {
-		MotionStore.addChangeListener(this._onChange);
+		WebcamMotionStore.addChangeListener(this._onChange);
 	},
 	componentWillUnmount: function() {
-		MotionStore.removeChangeListener(this._onChange);
+		WebcamMotionStore.removeChangeListener(this._onChange);
+	},
+	componentDidUpdate: function(prevProps, prevState) {
+		if(this.state.src && !prevState.src) {
+			WebcamMotionActionCreator.onRAF(); // video has just started playing, we should get motion detection going as well. For this we use request animation frame in action creator.
+		}
 	},
 	// USER INPUT EVENTS ////////////////////
 	handleGetVideoSrc: function() {
-		VideoActionCreator.addVideoSrc();
+		WebcamMotionActionCreator.addVideoSrc();
 	},
 	// RENDERING ////////////////////////////
 	render: function() {
-		var motionComponent = this.state.startMotionDetection ? <Motion /> : null; // video component needs to init before motion component
+		var motionComponent = this.state.src ? <Motion /> : null; // video component needs to init before motion component
 		return (
 			<div id="arm-container">
 				<div id="buttons-container"><button onClick={this.handleGetVideoSrc}>Get Webcam Feed</button></div>
 				<div id="video-and-motion-container">
-					<Video width={640} height={480} isPlaying={false} />
+					<Video width={640} height={480} src={this.state.src} />
 					{motionComponent}
 				</div>
 			</div>

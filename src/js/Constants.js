@@ -11,7 +11,8 @@ export default {
   ActionTypes: keyMirror({
     ADD_VIDEO_SRC: null,
     ADD_VIDEO_SRC_ERROR: null,
-    ADD_FRAME: null
+    ADD_FRAME: null,
+    RAF: null
   }),
   ActionSources: keyMirror({
     SERVER_ACTION: null,

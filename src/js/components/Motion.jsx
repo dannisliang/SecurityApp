@@ -1,48 +1,55 @@
 import React from 'react';
 import Constants from '../Constants';
-import MotionStore from '../stores/MotionStore';
-import VideoActionCreator from '../actions/VideoActionCreator';
+import WebcamMotionStore from '../stores/WebcamMotionStore';
+import WebcamMotionActionCreator from '../actions/WebcamMotionActionCreator';
 import Dispatcher from '../Dispatcher';
 import MotionBox from './MotionBox.jsx';
 
 export default React.createClass({
 	// EVENT HANDLERS ////////////////////////
 	_onChange: function() {
-		this.setState(MotionStore.getAll());
+		this.setState(WebcamMotionStore.getAll());
 	},
 	// INITIAL STATE ////////////////////////
 	getInitialState: function() {
-		return MotionStore.getAll();
+		return {}
 	},
 	// LIFECYCLE ////////////////////////////
 	componentDidMount: function() {
 		console.log('Motion.jsx > init');
-		MotionStore.addChangeListener(this._onChange);
+		WebcamMotionStore.addChangeListener(this._onChange);
 		// by setting the prev/next frame canvases here we avoid finding them during RAF
 		this.previousFrameCanvasContext = React.findDOMNode(this.refs.previousFrameCanvas).getContext('2d');
 		this.currentFrameCanvasContext  = React.findDOMNode(this.refs.currentFrameCanvas).getContext('2d');
 		// start render loop
-		this.onRAF();
+		//WebcamMotionActionCreator.onRAF();
 	},
 	componentWillUnmount: function() {
-		MotionStore.removeChangeListener(this._onChange);
+		WebcamMotionStore.removeChangeListener(this._onChange);
+	},
+	componentDidUpdate: function(prevProps, prevState) {
+		if(this.state.raf) {
+			// compare frames
+		}
 	},
 	// METHODS //////////////////////////////
-	onRAF: function() {
+	/*onRAF: function() {
 		var that = this,
 			raf = (function(){
 				return  window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function(callback){ window.setTimeout(callback, 1000/60); };
 			})(),
 			renderRAF = function() {
 				if(!that.isMounted()) { return; }
-				if(!Dispatcher.isDispatching()){ VideoActionCreator.capture(); }
-				if(that.state.previousFrame && that.state.currentFrame) {
-					that.compareFrames(that.state.previousFrame, that.state.currentFrame);
-				}
+				//if(!Dispatcher.isDispatching()){
+					WebcamMotionActionCreator.capture();
+				//}
+				//if(that.state.previousFrame && that.state.currentFrame) {
+				//	that.compareFrames(that.state.previousFrame, that.state.currentFrame);
+				//}
 				raf(renderRAF);
 			};
 		renderRAF();
-	},
+	},*/
 	compareFrames: function(previousFrame, currentFrame) {
 		if(!previousFrame || !currentFrame) { return; }
 		// reset vars

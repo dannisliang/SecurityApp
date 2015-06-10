@@ -1,49 +1,46 @@
 import React from 'react';
 import Constants from '../Constants';
-import VideoStore from '../stores/VideoStore';
-import VideoActionCreator from '../actions/VideoActionCreator';
+import WebcamMotionStore from '../stores/WebcamMotionStore';
+import WebcamMotionActionCreator from '../actions/WebcamMotionActionCreator';
 import Dispatcher from '../Dispatcher';
 
 export default React.createClass({
+	// LOCAL VARS ////////////////////////////
+	isPlaying: false,
 	// EVENT HANDLERS ////////////////////////
 	_onChange: function() {
-		this.setState(VideoStore.getAll());
-		if(this.state.src && !this.props.isPlaying) {
-			// TODO: maybe there is a better way to handle this type of functionality in react/flux
-			this._onPlay();
-		} else if(this.state.capture = true) {
+		this.setState(WebcamMotionStore.getAll());
+		/*if(this.state.capture = true) {
 			this.capture();
-		}
+		}*/
 	},
 	_onPlay: function() {
-		this.props.isPlaying = true;
+		if(this.isPlaying) { return; }
+		this.isPlaying = true;
 		React.findDOMNode(this.refs.video).play();
 	},
 
 	// INITIAL STATE ////////////////////////
 	getInitialState: function() {
-		return VideoStore.getAll();
+		return WebcamMotionStore.getAll();
 	},
 
 	// REGISTER/UNREGISTER ////////////////////////
 	componentDidMount: function() {
-		VideoStore.addChangeListener(this._onChange);
+		WebcamMotionStore.addChangeListener(this._onChange);
 	},
 	componentWillUnmount: function() {
-		VideoStore.removeChangeListener(this._onChange);
+		WebcamMotionStore.removeChangeListener(this._onChange);
 	},
-	componentWillReceiveProps: function(object) {
+	componentDidUpdate: function() {
 		// TODO: move some functionality in here maybe https://facebook.github.io/react/docs/working-with-the-browser.html#updating
-	},
-
-	// USER EVENTS /////////////////////////////////
-	handleGetVideoSrc: function() {
-		VideoActionCreator.addVideoSrc();
+		if(this.props.src) {
+			this._onPlay();
+		}
 	},
 
 	// METHODS /////////////////////////////////////
 	capture: function() {
-		//if(Dispatcher.isDispatching()){ return; }
 		var canvas    = document.createElement('canvas'),
 			video     = React.findDOMNode(this.refs.video);
 		canvas.width  = this.props.width/10;
@@ -53,7 +50,7 @@ export default React.createClass({
 		// TODO: see if better workaround for this
 		setTimeout(function() {
 			if(Dispatcher.isDispatching()){ return; }
-			VideoActionCreator.addFrame(canvas);
+			WebcamMotionActionCreator.addFrame(canvas);
 		}, 0);
 	},
 
@@ -61,7 +58,7 @@ export default React.createClass({
 	render: function() {
 		return (
 			<div id="video-container">
-				<video ref="video" width={this.props.width} height={this.props.height} muted src={this.state.src}></video>
+				<video ref="video" width={this.props.width} height={this.props.height} muted src={this.props.src}></video>
 			</div>
 		);
 	},
