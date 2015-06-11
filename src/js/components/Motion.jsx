@@ -33,23 +33,6 @@ export default React.createClass({
 		}
 	},
 	// METHODS //////////////////////////////
-	/*onRAF: function() {
-		var that = this,
-			raf = (function(){
-				return  window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function(callback){ window.setTimeout(callback, 1000/60); };
-			})(),
-			renderRAF = function() {
-				if(!that.isMounted()) { return; }
-				//if(!Dispatcher.isDispatching()){
-					WebcamMotionActionCreator.capture();
-				//}
-				//if(that.state.previousFrame && that.state.currentFrame) {
-				//	that.compareFrames(that.state.previousFrame, that.state.currentFrame);
-				//}
-				raf(renderRAF);
-			};
-		renderRAF();
-	},*/
 	compareFrames: function(previousFrame, currentFrame) {
 		if(!previousFrame || !currentFrame) { return; }
 		// reset vars

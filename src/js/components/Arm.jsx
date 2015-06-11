@@ -5,13 +5,14 @@ import WebcamMotionStore from '../stores/WebcamMotionStore';
 import WebcamMotionActionCreator from '../actions/WebcamMotionActionCreator';
 
 export default React.createClass({
+	//mixins: [PureRenderMixin], NOTE: we can't use pure render mixin here because child components need to do things on raf
+	// INITIAL STATE ////////////////////////
+	getInitialState: function() {
+		return WebcamMotionStore.getAll();
+	},
 	// EVENT HANDLERS ////////////////////////
 	_onChange: function() {
 		this.setState(WebcamMotionStore.getAll());
-	},
-	// INITIAL STATE ////////////////////////
-	getInitialState: function() {
-		return {};
 	},
 	// LIFECYCLE ////////////////////////////
 	componentDidMount: function() {
@@ -22,12 +23,26 @@ export default React.createClass({
 	},
 	componentDidUpdate: function(prevProps, prevState) {
 		if(this.state.src && !prevState.src) {
-			WebcamMotionActionCreator.onRAF(); // video has just started playing, we should get motion detection going as well. For this we use request animation frame in action creator.
+			this.startRAF();  // now that video src is set and playing we should start the RAF loop so motion detection can use it
 		}
 	},
 	// USER INPUT EVENTS ////////////////////
 	handleGetVideoSrc: function() {
 		WebcamMotionActionCreator.addVideoSrc();
+	},
+	// METHODS //////////////////////////////
+	startRAF: function() {
+		var that = this,
+			raf = (function(){
+				// TODO: move this to mixin or core
+				return  window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function(callback){ window.setTimeout(callback, 1000/60); };
+			})(),
+			renderRAF = function() {
+				if(!that.isMounted()) { return; }   // stop this loop when user leaves this component
+				WebcamMotionActionCreator.onRAF();  // dispatch raf event for stores to listen for
+				raf(renderRAF);                     // loop this function on raf
+			};
+		renderRAF();
 	},
 	// RENDERING ////////////////////////////
 	render: function() {
@@ -36,7 +51,7 @@ export default React.createClass({
 			<div id="arm-container">
 				<div id="buttons-container"><button onClick={this.handleGetVideoSrc}>Get Webcam Feed</button></div>
 				<div id="video-and-motion-container">
-					<Video width={640} height={480} src={this.state.src} />
+					<Video width={640} height={480} src={this.state.src} raf={this.state.raf} />
 					{motionComponent}
 				</div>
 			</div>

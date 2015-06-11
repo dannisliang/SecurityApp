@@ -1,33 +1,28 @@
+/*
+Dispatcher.js
+=============
+Handles dispatching of all actions that stores listen for. It's important to note there is
+a timeout in this dispatcher because we use RAF in an action so the dispatcher is always dispatching while that is on
+more info: https://github.com/goatslacker/alt/issues/71
+*/
+
 import {Dispatcher} from 'flux';
 import Constants from './Constants';
 import assign from 'object-assign';
 
-/**
- * Purpose: to create a single dispatcher instance for use throughout the
- * entire app. The two methods below are merely thin wrappers that describe
- * where the action originated from. Not mandatory, but may be helpful
- **/
 export default assign(new Dispatcher(), {
-
-  /**
-   * This does nothing yet, but will come in handy if you need to respond
-   * to server-originated events and treat them differently...
-   **/
-  handleServerAction(action) {
-    this.dispatch({
-      source: Constants.ActionSources.SERVER_ACTION,
-      action: action
-    });
-  },
-
-  /**
-   * Very thin wrapper around the core dispatcher API, just to signify
-   * that actions triggered here originated on the client-side
-   **/
-  handleViewAction(action) {
-    this.dispatch({
-      source: Constants.ActionSources.VIEW_ACTION,
-      action: action
-    });
-  }
+	handleViewAction(action) {
+		var that = this,
+			dispatchArgs = {
+				source: Constants.ActionSources.VIEW_ACTION,
+				action: action
+			};
+		if(this.$Dispatcher_isDispatching) {
+			setTimeout(function(){
+				that.dispatch(dispatchArgs);
+			}, 0);
+		} else {
+			this.dispatch(dispatchArgs);
+		}
+	}
 });
