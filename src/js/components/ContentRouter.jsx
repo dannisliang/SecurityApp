@@ -16,16 +16,12 @@ import Images from './Images.jsx';
 export default React.createClass({
 	mixins: [RouterMixin],
 	routes: {
-		'/' : 'home',
-		'/arm': 'arm'
+		'/'       : 'home',
+		'/arm'    : 'arm',
+		'/images' : 'images'
 	},
-	render: function() {
-        return this.renderCurrentRoute();
-    },
-	home: function() {
-		return <Home />
-	},
-	arm: function() {
-		return <Arm />
-	}
+	render : function() { return this.renderCurrentRoute(); },
+	home   : function() { return <Home /> },
+	arm    : function() { return <Arm /> },
+	images : function() { return <Images /> }
 });

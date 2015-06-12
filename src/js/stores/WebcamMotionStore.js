@@ -40,6 +40,16 @@ const WebcamMotionStore = assign({}, BaseStore, {
 				});
 				WebcamMotionStore.emitChange();
 				break;
+			case Constants.ActionTypes.SET_FPS:
+				_data = _data.merge({
+					fps: action.fps,
+					fpsInterval: 1000/action.fps
+				});
+				WebcamMotionStore.emitChange();
+				break;
+			case Constants.ActionTypes.TOGGLE_DEBUG:
+				_data = _data.set('debug', !_data.get('debug'));
+				break;
 		}
 	})
 });

@@ -12,7 +12,9 @@ export default {
     ADD_VIDEO_SRC: null,
     ADD_VIDEO_SRC_ERROR: null,
     CAPTURE_FRAME: null,
-    RAF: null
+    RAF: null,
+    TOGGLE_DEBUG: null,
+    SET_FPS: null
   }),
   ActionSources: keyMirror({
     SERVER_ACTION: null,

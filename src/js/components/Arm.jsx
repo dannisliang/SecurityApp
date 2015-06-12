@@ -1,6 +1,7 @@
 import React from 'react';
 import Video from './Video.jsx';
 import Motion from './Motion.jsx';
+import MotionSettings from './MotionSettings.jsx';
 import WebcamMotionStore from '../stores/WebcamMotionStore';
 import WebcamMotionActionCreator from '../actions/WebcamMotionActionCreator';
 
@@ -66,6 +67,9 @@ export default React.createClass({
 			src: this.state.src,
 			raf: this.state.raf
 		};
+		let settingsProps = {
+			fps: this.state.fps
+		};
 		let motionComponent = this.state.src ? <Motion {...motionProps} /> : null; // video component needs to init before motion component
 		return (
 			<div id="arm-container">
@@ -74,6 +78,7 @@ export default React.createClass({
 					<Video {...videoProps} />
 					{motionComponent}
 				</div>
+				<MotionSettings {...settingsProps} />
 			</div>
 		);
 	}
