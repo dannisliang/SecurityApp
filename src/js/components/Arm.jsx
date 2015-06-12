@@ -54,12 +54,24 @@ export default React.createClass({
 	},
 	// RENDERING ////////////////////////////
 	render: function() {
-		var motionComponent = this.state.src ? <Motion raf={this.state.raf} debug={this.state.debug} currentFrame={this.state.currentFrame} previousFrame={this.state.previousFrame} /> : null; // video component needs to init before motion component
+		let motionProps = {
+			raf: this.state.raf,
+			debug: this.state.debug,
+			currentFrame: this.state.currentFrame,
+			previousFrame: this.state.previousFrame
+		};
+		let videoProps = {
+			width: 640,
+			height: 480,
+			src: this.state.src,
+			raf: this.state.raf
+		};
+		let motionComponent = this.state.src ? <Motion {...motionProps} /> : null; // video component needs to init before motion component
 		return (
 			<div id="arm-container">
 				<div id="buttons-container"><button onClick={this.handleGetVideoSrc}>Get Webcam Feed</button></div>
 				<div id="video-and-motion-container">
-					<Video width={640} height={480} src={this.state.src} raf={this.state.raf} />
+					<Video {...videoProps} />
 					{motionComponent}
 				</div>
 			</div>

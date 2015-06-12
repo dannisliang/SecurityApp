@@ -4,10 +4,10 @@ export default React.createClass({
 	// RENDERING ////////////////////////////
 	render: function() {
 		var motionBoxStyle = {
-			left   : this.props.motionZoneTopLeftX,
-			top    : this.props.motionZoneTopLeftY,
-			width  : this.props.motionZoneBottomRightX - this.props.motionZoneTopLeftX,
-			height : this.props.motionZoneBottomRightY - this.props.motionZoneTopLeftY
+			left   : this.props.motionzone[0].x,
+			top    : this.props.motionzone[0].y,
+			width  : this.props.motionzone[1].x - this.props.motionzone[0].x,
+			height : this.props.motionzone[1].y - this.props.motionzone[0].y
 		};
 		return (
 			<div id="motion-box" style={motionBoxStyle}></div>

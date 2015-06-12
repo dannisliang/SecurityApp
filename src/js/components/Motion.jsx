@@ -1,11 +1,19 @@
 import React from 'react';
+import Addons from 'react/addons';
 import Constants from '../Constants';
 import WebcamMotionStore from '../stores/WebcamMotionStore';
 import WebcamMotionActionCreator from '../actions/WebcamMotionActionCreator';
 import Dispatcher from '../Dispatcher';
 import MotionBox from './MotionBox.jsx';
+var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
+	mixins: [PureRenderMixin],
+	getInitialState: function() {
+		return {
+			motionZone: [{x:0,y:0},{x:0,y:0}]
+		};
+	},
 	// LIFECYCLE ////////////////////////////
 	componentDidMount: function() {
 		console.log('Motion.jsx > init');
@@ -23,7 +31,6 @@ export default React.createClass({
 	},
 	// METHODS //////////////////////////////
 	compareFrames: function(previousFrame, currentFrame) {
-		console.log('compare');
 		if(!previousFrame || !currentFrame) { return; }
 		// reset vars
 		var motionDetected = false,
@@ -44,33 +51,27 @@ export default React.createClass({
 				if(!this.comparePixels(pixel1, pixel2)) {
 					motionDetected = true;
 					if(!this.props.debug) { break; }
-					/*if(x < motionZoneTopLeftX) {
-						motionZoneTopLeftX = x;
-						this.setState({
-							motionZoneTopLeftX: motionZoneTopLeftX
-						});
-					}
-					if(y < motionZoneTopLeftY) {
-						motionZoneTopLeftY = y;
-						this.setState({
-							motionZoneTopLeftY: motionZoneTopLeftY
-						});
-					}
-					if(x > motionZoneBottomRightX) {
-						motionZoneBottomRightX = x;
-						this.setState({
-							motionZoneBottomRightX: motionZoneBottomRightX
-						});
-					}
-					if(y > motionZoneBottomRightY) {
-						motionZoneBottomRightY = y;
-						this.setState({
-							motionZoneBottomRightY: motionZoneBottomRightY
-						});
-					}*/
+					// set motion zone corners if in debug mode
+					if(x < motionZoneTopLeftX) { motionZoneTopLeftX = x; }
+					if(y < motionZoneTopLeftY) { motionZoneTopLeftY = y; }
+					if(x > motionZoneBottomRightX) { motionZoneBottomRightX = x; }
+					if(y > motionZoneBottomRightY) { motionZoneBottomRightY = y; }
 				}
 			}
 			if(motionDetected && !this.props.debug) { break; }
+		}
+		// set overall motion zone area to state if in debug mode (this component and its children are the only ones that use this)
+		if(this.props.debug) {
+			this.setState({motionZone: [
+				{
+					x: motionZoneTopLeftX * 10,
+					y: motionZoneTopLeftY * 10
+				},
+				{
+					x: motionZoneBottomRightX * 10,
+					y: motionZoneBottomRightY * 10
+				}
+			]});
 		}
 	},
 	comparePixels: function(pixel1, pixel2) {
@@ -88,7 +89,7 @@ export default React.createClass({
 	render: function() {
 		return (
 			<div id="motion-container">
-				<MotionBox />
+				<MotionBox motionzone={this.state.motionZone}/>
 				<canvas ref="previousFrameCanvas"></canvas>
 				<canvas ref="currentFrameCanvas"></canvas>
 			</div>

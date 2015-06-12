@@ -28,6 +28,7 @@ li.task {
 	height: 100%;
 }
 #motion-box {
+	@include transition(all 0.1s linear);
 	position: absolute;
 	background: rgba(255,255,255,0.5);
 }

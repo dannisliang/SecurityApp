@@ -4,12 +4,12 @@ import Constants from '../Constants';
 import BaseStore from './BaseStore';
 import assign from 'object-assign';
 
-let fps = 5;
+let fps = 10;
 let fpsInterval = 1000/fps;
 
 // data storage
 let _data = OrderedMap({
-	debug: false,
+	debug: true,
 	fps: fps,
 	fpsInterval: fpsInterval
 });

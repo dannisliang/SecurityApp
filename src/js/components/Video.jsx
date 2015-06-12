@@ -40,7 +40,9 @@ export default React.createClass({
 	// RENDERING ////////////////////////
 	render: function() {
 		return (
-			<video ref="video" width={this.props.width} height={this.props.height} muted src={this.props.src}></video>
+			<div id="video-container">
+				<video ref="video" width={this.props.width} height={this.props.height} muted src={this.props.src}></video>
+			</div>
 		);
 	},
 });
