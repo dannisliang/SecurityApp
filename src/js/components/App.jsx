@@ -12,7 +12,7 @@ export default React.createClass({
     return (
       <div>
         <Navigation/>
-        <ContentRouter/>
+        <ContentRouter history={true} />
       </div>
     );
   }
