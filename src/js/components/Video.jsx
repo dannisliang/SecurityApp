@@ -21,7 +21,7 @@ export default React.createClass({
 		if(nextProps.src && !this.props.src) {
 			setTimeout(this.play, 0); // timeout here to allow src to be set on the video element before we try to play it
 		}
-		if(nextProps.raf) {
+		if(nextProps.raf && !this.props.raf) {
 			this.captureFrame();
 		}
 	},

@@ -6,34 +6,24 @@ import Dispatcher from '../Dispatcher';
 import MotionBox from './MotionBox.jsx';
 
 export default React.createClass({
-	// EVENT HANDLERS ////////////////////////
-	_onChange: function() {
-		this.setState(WebcamMotionStore.getAll());
-	},
-	// INITIAL STATE ////////////////////////
-	getInitialState: function() {
-		return {}
-	},
 	// LIFECYCLE ////////////////////////////
 	componentDidMount: function() {
 		console.log('Motion.jsx > init');
-		WebcamMotionStore.addChangeListener(this._onChange);
 		// by setting the prev/next frame canvases here we avoid finding them during RAF
 		this.previousFrameCanvasContext = React.findDOMNode(this.refs.previousFrameCanvas).getContext('2d');
 		this.currentFrameCanvasContext  = React.findDOMNode(this.refs.currentFrameCanvas).getContext('2d');
-		// start render loop
-		//WebcamMotionActionCreator.onRAF();
 	},
 	componentWillUnmount: function() {
 		WebcamMotionStore.removeChangeListener(this._onChange);
 	},
-	componentDidUpdate: function(prevProps, prevState) {
-		if(this.state.raf) {
-			// compare frames
+	componentWillReceiveProps: function(nextProps) {
+		if(!this.props.raf && nextProps.raf && nextProps.previousFrame && nextProps.currentFrame) {
+			this.compareFrames(nextProps.previousFrame, nextProps.currentFrame);
 		}
 	},
 	// METHODS //////////////////////////////
 	compareFrames: function(previousFrame, currentFrame) {
+		console.log('compare');
 		if(!previousFrame || !currentFrame) { return; }
 		// reset vars
 		var motionDetected = false,
@@ -42,8 +32,8 @@ export default React.createClass({
 			motionZoneBottomRightX = 0,
 			motionZoneBottomRightY = 0;
 		// clear & draw
-		this.previousFrameCanvasContext.clearRect(0,0,100000,100000);
-		this.currentFrameCanvasContext.clearRect(0,0,100000,100000);
+		this.previousFrameCanvasContext.clearRect(0,0, 64, 48);
+		this.currentFrameCanvasContext.clearRect(0,0, 64, 48);
 		this.previousFrameCanvasContext.drawImage(previousFrame, 0, 0, 64, 48);
 		this.currentFrameCanvasContext.drawImage(currentFrame, 0, 0, 64, 48);
 		// compare pixels
@@ -53,8 +43,8 @@ export default React.createClass({
 					pixel2 = this.currentFrameCanvasContext.getImageData(x, y, 1, 1).data;
 				if(!this.comparePixels(pixel1, pixel2)) {
 					motionDetected = true;
-					if(!this.state.debugMode) { break; }
-					if(x < motionZoneTopLeftX) {
+					if(!this.props.debug) { break; }
+					/*if(x < motionZoneTopLeftX) {
 						motionZoneTopLeftX = x;
 						this.setState({
 							motionZoneTopLeftX: motionZoneTopLeftX
@@ -77,10 +67,10 @@ export default React.createClass({
 						this.setState({
 							motionZoneBottomRightY: motionZoneBottomRightY
 						});
-					}
+					}*/
 				}
 			}
-			if(motionDetected && !this.state.debugMode) { break; }
+			if(motionDetected && !this.props.debug) { break; }
 		}
 	},
 	comparePixels: function(pixel1, pixel2) {
@@ -98,7 +88,7 @@ export default React.createClass({
 	render: function() {
 		return (
 			<div id="motion-container">
-				<MotionBox motionZoneTopLeftX={this.state.motionZoneTopLeftX * 10} motionZoneTopLeftY={this.state.motionZoneTopLeftY * 10} motionZoneBottomRightX={this.state.motionZoneBottomRightX * 10} motionZoneBottomRightY={this.state.motionZoneBottomRightY * 10} />
+				<MotionBox />
 				<canvas ref="previousFrameCanvas"></canvas>
 				<canvas ref="currentFrameCanvas"></canvas>
 			</div>

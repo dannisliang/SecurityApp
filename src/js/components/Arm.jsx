@@ -5,7 +5,6 @@ import WebcamMotionStore from '../stores/WebcamMotionStore';
 import WebcamMotionActionCreator from '../actions/WebcamMotionActionCreator';
 
 export default React.createClass({
-	//mixins: [PureRenderMixin], NOTE: we can't use pure render mixin here because child components need to do things on raf
 	// INITIAL STATE ////////////////////////
 	getInitialState: function() {
 		return WebcamMotionStore.getAll();
@@ -39,14 +38,23 @@ export default React.createClass({
 			})(),
 			renderRAF = function() {
 				if(!that.isMounted()) { return; }   // stop this loop when user leaves this component
-				WebcamMotionActionCreator.onRAF();  // dispatch raf event for stores to listen for
 				raf(renderRAF);                     // loop this function on raf
+				// check time elapsed since last RAF
+				let now     = Date.now();
+				let elapsed = now - (that.then || 0);
+				// throttle RAF to FPS
+				if(elapsed > that.state.fpsInterval) {
+					that.then = now - (elapsed % that.state.fpsInterval);
+					WebcamMotionActionCreator.onRAF(true);  // dispatch raf event for stores to listen for
+				} else {
+					WebcamMotionActionCreator.onRAF(false);
+				}
 			};
 		renderRAF();
 	},
 	// RENDERING ////////////////////////////
 	render: function() {
-		var motionComponent = this.state.src ? <Motion /> : null; // video component needs to init before motion component
+		var motionComponent = this.state.src ? <Motion raf={this.state.raf} debug={this.state.debug} currentFrame={this.state.currentFrame} previousFrame={this.state.previousFrame} /> : null; // video component needs to init before motion component
 		return (
 			<div id="arm-container">
 				<div id="buttons-container"><button onClick={this.handleGetVideoSrc}>Get Webcam Feed</button></div>

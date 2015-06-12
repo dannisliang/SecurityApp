@@ -18,15 +18,15 @@ export default {
 			};
 		Core.getWebcamSrc(onSuccess, onError);
 	},
-	onRAF: function() {
+	onRAF: function(bool) {
 		Dispatcher.handleViewAction({
 			type: Constants.ActionTypes.RAF,
-			raf: true
+			raf: bool
 		});
 	},
 	captureFrame: function(canvas) {
 		Dispatcher.handleViewAction({
-			type: Constants.ActionTypes.ADD_FRAME,
+			type: Constants.ActionTypes.CAPTURE_FRAME,
 			canvas: canvas
 		});
 	}
