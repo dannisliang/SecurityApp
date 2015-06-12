@@ -30,6 +30,7 @@ export default React.createClass({
 		}
 	},
 	// METHODS //////////////////////////////
+	// TODO: move these to webworkers if possible
 	compareFrames: function(previousFrame, currentFrame) {
 		if(!previousFrame || !currentFrame) { return; }
 		// reset vars
