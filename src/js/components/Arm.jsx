@@ -2,24 +2,30 @@ import React from 'react';
 import Video from './Video.jsx';
 import Motion from './Motion.jsx';
 import MotionSettings from './MotionSettings.jsx';
-import WebcamMotionStore from '../stores/WebcamMotionStore';
-import WebcamMotionActionCreator from '../actions/WebcamMotionActionCreator';
+import MotionStore from '../stores/MotionStore';
+import SettingsStore from '../stores/SettingsStore';
+import MotionActions from '../actions/MotionActions';
+import assign from 'object-assign';
 
 export default React.createClass({
 	// INITIAL STATE ////////////////////////
 	getInitialState: function() {
-		return WebcamMotionStore.getAll();
+		return assign({}, MotionStore.getAll(), SettingsStore.getAll());
 	},
 	// EVENT HANDLERS ////////////////////////
 	_onChange: function() {
-		this.setState(WebcamMotionStore.getAll());
+		// if setState is called in the same tick, react is smart enough to merge them
+		this.setState(MotionStore.getAll());
+		this.setState(SettingsStore.getAll());
 	},
 	// LIFECYCLE ////////////////////////////
 	componentDidMount: function() {
-		WebcamMotionStore.addChangeListener(this._onChange);
+		MotionStore.addChangeListener(this._onChange);
+		SettingsStore.addChangeListener(this._onChange);
 	},
 	componentWillUnmount: function() {
-		WebcamMotionStore.removeChangeListener(this._onChange);
+		MotionStore.removeChangeListener(this._onChange);
+		SettingsStore.removeChangeListener(this._onChange);
 	},
 	componentDidUpdate: function(prevProps, prevState) {
 		if(this.state.src && !prevState.src) {
@@ -28,7 +34,7 @@ export default React.createClass({
 	},
 	// USER INPUT EVENTS ////////////////////
 	handleGetVideoSrc: function() {
-		WebcamMotionActionCreator.addVideoSrc();
+		MotionActions.addVideoSrc();
 	},
 	// METHODS //////////////////////////////
 	startRAF: function() {
@@ -46,9 +52,9 @@ export default React.createClass({
 				// throttle RAF to FPS
 				if(elapsed > that.state.fpsInterval) {
 					that.then = now - (elapsed % that.state.fpsInterval);
-					WebcamMotionActionCreator.onRAF(true);  // dispatch raf event for stores to listen for
+					MotionActions.onRAF(true);  // dispatch raf event for stores to listen for
 				} else {
-					WebcamMotionActionCreator.onRAF(false);
+					MotionActions.onRAF(false);
 				}
 			};
 		renderRAF();
@@ -56,21 +62,19 @@ export default React.createClass({
 	// RENDERING ////////////////////////////
 	render: function() {
 		let motionProps = {
-			raf: this.state.raf,
-			debug: this.state.debug,
-			currentFrame: this.state.currentFrame,
-			previousFrame: this.state.previousFrame
+			raf           : this.state.raf,
+			debug         : this.state.debug,
+			currentFrame  : this.state.currentFrame,
+			previousFrame : this.state.previousFrame
 		};
 		let videoProps = {
-			width: 640,
-			height: 480,
-			src: this.state.src,
-			raf: this.state.raf
+			width   : 640,  // TODO: move to store
+			height  : 480,  // TODO: move to store
+			src     : this.state.src,
+			raf     : this.state.raf
 		};
-		let settingsProps = {
-			fps: this.state.fps
-		};
-		let motionComponent = this.state.src ? <Motion {...motionProps} /> : null; // video component needs to init before motion component
+		let motionComponent   = this.state.src ? <Motion {...motionProps} /> : null;
+		let settingsComponent = this.state.src ? <MotionSettings /> : null;
 		return (
 			<div id="arm-container">
 				<div id="buttons-container"><button onClick={this.handleGetVideoSrc}>Get Webcam Feed</button></div>
@@ -78,7 +82,7 @@ export default React.createClass({
 					<Video {...videoProps} />
 					{motionComponent}
 				</div>
-				<MotionSettings {...settingsProps} />
+				{settingsComponent}
 			</div>
 		);
 	}

@@ -1,9 +1,8 @@
 import React from 'react';
 import Addons from 'react/addons';
 import Constants from '../Constants';
-import WebcamMotionStore from '../stores/WebcamMotionStore';
-import WebcamMotionActionCreator from '../actions/WebcamMotionActionCreator';
-import Dispatcher from '../Dispatcher';
+import MotionStore from '../stores/MotionStore';
+import MotionActions from '../actions/MotionActions';
 var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
@@ -21,6 +20,7 @@ export default React.createClass({
 		if(nextProps.src && !this.props.src) {
 			setTimeout(this.play, 0); // timeout here to allow src to be set on the video element before we try to play it
 		}
+		//console.log(nextProps.raf, !this.props.raf);
 		if(nextProps.raf && !this.props.raf) {
 			this.captureFrame();
 		}
@@ -35,7 +35,7 @@ export default React.createClass({
 		canvas.width  = this.captureWidth;
 		canvas.height = this.captureHeight;
 		canvas.getContext('2d').drawImage(video, 0, 0, this.captureWidth, this.captureHeight);
-		WebcamMotionActionCreator.captureFrame(canvas); // now that we have the frame, we need to send it to an action so other components like motion can see it
+		MotionActions.captureFrame(canvas); // now that we have the frame, we need to send it to an action so other components like motion can see it
 	},
 	// RENDERING ////////////////////////
 	render: function() {

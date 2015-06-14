@@ -14,8 +14,10 @@ export default {
     CAPTURE_FRAME: null,
     RAF: null,
     TOGGLE_DEBUG: null,
-    SET_FPS: null
+    SET_FPS: null,
+    MOTION_ZONE: null
   }),
+  // TODO: this will come in handy when be apis come into play
   ActionSources: keyMirror({
     SERVER_ACTION: null,
     VIEW_ACTION: null

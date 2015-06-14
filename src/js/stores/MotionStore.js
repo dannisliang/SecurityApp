@@ -2,19 +2,15 @@ import { OrderedMap } from 'immutable';
 import Dispatcher from '../Dispatcher';
 import Constants from '../Constants';
 import BaseStore from './BaseStore';
+import SettingsStore from './SettingsStore';
 import assign from 'object-assign';
 
-let fps = 10;
-let fpsInterval = 1000/fps;
-
-// data storage
+// data storage - the values here are also the default settings
 let _data = OrderedMap({
-	debug: true,
-	fps: fps,
-	fpsInterval: fpsInterval
+	motionZone: {top: 0, left: 0, width: 0, height: 0}   // used in debug mode to show what part of the frame we're detecting motion in
 });
 
-const WebcamMotionStore = assign({}, BaseStore, {
+const MotionStore = assign({}, BaseStore, {
 	// public methods used by Controller-View to operate on data
 	getAll: function() {
 		return _data.toObject();
@@ -26,31 +22,25 @@ const WebcamMotionStore = assign({}, BaseStore, {
 			case Constants.ActionTypes.RAF:
 				if(action.raf !== _data.get('raf')) {
 					_data = _data.set('raf', action.raf);
-					WebcamMotionStore.emitChange();
+					MotionStore.emitChange();
 				}
+				break;
+			case Constants.ActionTypes.MOTION_ZONE:
+				_data = _data.set('motionZone', action.motionZone);
+				MotionStore.emitChange();
 				break;
 			case Constants.ActionTypes.ADD_VIDEO_SRC:
 				_data = _data.set('src', action.src);
-				WebcamMotionStore.emitChange();
+				MotionStore.emitChange();
 				break;
 			case Constants.ActionTypes.CAPTURE_FRAME:
 				_data = _data.merge({
 					previousFrame: _data.get('currentFrame'),
 					currentFrame: action.canvas
 				});
-				WebcamMotionStore.emitChange();
-				break;
-			case Constants.ActionTypes.SET_FPS:
-				_data = _data.merge({
-					fps: action.fps,
-					fpsInterval: 1000/action.fps
-				});
-				WebcamMotionStore.emitChange();
-				break;
-			case Constants.ActionTypes.TOGGLE_DEBUG:
-				_data = _data.set('debug', !_data.get('debug'));
+				MotionStore.emitChange();
 				break;
 		}
 	})
 });
-export default WebcamMotionStore;
+export default MotionStore;

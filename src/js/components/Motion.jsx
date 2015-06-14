@@ -1,33 +1,36 @@
 import React from 'react';
 import Addons from 'react/addons';
 import Constants from '../Constants';
-import WebcamMotionStore from '../stores/WebcamMotionStore';
-import WebcamMotionActionCreator from '../actions/WebcamMotionActionCreator';
-import Dispatcher from '../Dispatcher';
+import MotionStore from '../stores/MotionStore';
+import MotionActions from '../actions/MotionActions';
 import MotionBox from './MotionBox.jsx';
 var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
 	mixins: [PureRenderMixin],
+	// INITIAL STATE ////////////////////////
 	getInitialState: function() {
-		return {
-			motionZone: [{x:0,y:0},{x:0,y:0}]
-		};
+		return MotionStore.getAll();
 	},
-	// LIFECYCLE ////////////////////////////
+	// EVENT HANDLERS ////////////////////////
+	_onChange: function() {
+		this.setState(MotionStore.getAll());
+	},
+	// LIFECYCLE //////////////////////////
 	componentDidMount: function() {
-		console.log('Motion.jsx > init');
+		MotionStore.addChangeListener(this._onChange);
 		// by setting the prev/next frame canvases here we avoid finding them during RAF
 		this.previousFrameCanvasContext = React.findDOMNode(this.refs.previousFrameCanvas).getContext('2d');
 		this.currentFrameCanvasContext  = React.findDOMNode(this.refs.currentFrameCanvas).getContext('2d');
 	},
-	componentWillUnmount: function() {
-		WebcamMotionStore.removeChangeListener(this._onChange);
-	},
 	componentWillReceiveProps: function(nextProps) {
+		//console.log('props');
 		if(!this.props.raf && nextProps.raf && nextProps.previousFrame && nextProps.currentFrame) {
 			this.compareFrames(nextProps.previousFrame, nextProps.currentFrame);
 		}
+	},
+	componentWillUnmount: function() {
+		MotionStore.removeChangeListener(this._onChange);
 	},
 	// METHODS //////////////////////////////
 	// TODO: move these to webworkers if possible
@@ -61,18 +64,18 @@ export default React.createClass({
 			}
 			if(motionDetected && !this.props.debug) { break; }
 		}
-		// set overall motion zone area to state if in debug mode (this component and its children are the only ones that use this)
-		if(this.props.debug) {
-			this.setState({motionZone: [
-				{
-					x: motionZoneTopLeftX * 10,
-					y: motionZoneTopLeftY * 10
-				},
-				{
-					x: motionZoneBottomRightX * 10,
-					y: motionZoneBottomRightY * 10
-				}
-			]});
+		// set overall motion zone area to state if in debug mode (displays a box over the video showing where motion is being detected in the frame)
+		if(this.props.debug && motionDetected) {
+			let motionZoneTop    = motionZoneTopLeftY * 10;
+			let motionZoneLeft   = motionZoneTopLeftX * 10;
+			let motionZoneWidth  = (motionZoneBottomRightX * 10) - motionZoneLeft;
+			let motionZoneHeight = (motionZoneBottomRightY * 10) - motionZoneTop;
+			MotionActions.motionZone({
+				top    : motionZoneTop,
+				left   : motionZoneLeft,
+				width  : motionZoneWidth,
+				height : motionZoneHeight
+			});
 		}
 	},
 	comparePixels: function(pixel1, pixel2) {
@@ -88,11 +91,12 @@ export default React.createClass({
 	},
 	// RENDERING ////////////////////////////
 	render: function() {
+		let motionBoxComponent = this.state.motionZone ? <MotionBox motionZone={this.state.motionZone} /> : null;
 		return (
 			<div id="motion-container">
-				<MotionBox motionzone={this.state.motionZone}/>
 				<canvas ref="previousFrameCanvas"></canvas>
 				<canvas ref="currentFrameCanvas"></canvas>
+				{motionBoxComponent}
 			</div>
 		);
 	},

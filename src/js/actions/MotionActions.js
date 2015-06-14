@@ -29,5 +29,11 @@ export default {
 			type: Constants.ActionTypes.CAPTURE_FRAME,
 			canvas: canvas
 		});
+	},
+	motionZone: function(object) {  // expects {top, left, width, height}
+		Dispatcher.handleViewAction({
+			type: Constants.ActionTypes.MOTION_ZONE,
+			motionZone: object
+		});
 	}
 };
