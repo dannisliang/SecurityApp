@@ -8,6 +8,12 @@ var PureRenderMixin = Addons.addons.PureRenderMixin;
 export default React.createClass({
 	// MIXINS /////////////////////////////
 	mixins: [PureRenderMixin],
+	getDefaultProps: function() {
+		return {
+			minSensitivity: 25,
+			maxSensitivity: 110
+		};
+	},
 	// INITIAL STATE //////////////////////
 	getInitialState: function() {
 		return SettingsStore.getAll();
@@ -28,8 +34,12 @@ export default React.createClass({
 		SettingsActions.toggleDebug();
 	},
 	handleChangeSensitivity: function(event) {
-		let sensitivity = (((100 - event.target.value) * (this.state.maxSensitivity - this.state.minSensitivity)) / 100) + this.state.minSensitivity;
+		// this converts 0-100% to the actual sensitivity value
+		let sensitivity = (((100 - event.target.value) * (this.props.maxSensitivity - this.props.minSensitivity)) / 100) + this.props.minSensitivity;
 		SettingsActions.setSensitivity(sensitivity);
+	},
+	handleChangeSustained: function(event) {
+		SettingsActions.setSustained(event.target.value);
 	},
 	handleChangeFPS: function(event) {
 		SettingsActions.setFPS(event.target.value);
@@ -39,14 +49,20 @@ export default React.createClass({
 	},
 	// RENDERING ////////////////////////
 	render: function() {
+		// this takes the actual sensitivity val and converts it to 0-100% to be more clear to user
+		let sensitivityPercent = Math.round(100 - (((this.state.sensitivity - this.props.minSensitivity) * 100) / (this.props.maxSensitivity - this.props.minSensitivity)));
+		let motionDetected = this.props.motionDetected ? 'Motion detected' : 'All clear';
 		return (
 			<div id="settings-container">
 				<div>
 					<button onClick={this.handleToggleDebug}>Toggle Debug</button>
 				</div><div>
 					<label>Sensitivity</label>
-					<input type="range" min="0" max="100" defaultValue={this.state.sensitivity} onChange={this.handleChangeSensitivity} />
-					{this.state.sensitivity}
+					<input type="range" min="0" max="100" defaultValue={sensitivityPercent} onChange={this.handleChangeSensitivity} />
+					{sensitivityPercent} | {this.state.sensitivity}
+				</div><div>
+					<label>Sustained</label>
+					<input type="range" min="1" max="10" defaultValue="2" onChange={this.handleChangeSustained} />
 				</div><div>
 					<label>FPS</label>
 					<input type="range" min="1" max="30" defaultValue={this.state.fps} onChange={this.handleChangeFPS} />
@@ -56,6 +72,7 @@ export default React.createClass({
 					<input type="range" min="2" max="15" defaultValue={this.state.pixelDensity} onChange={this.handleChangePixelDensity} />
 					{this.state.pixelDensity}
 				</div>
+				{motionDetected}
 			</div>
 		);
 	},

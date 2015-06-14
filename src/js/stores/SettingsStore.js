@@ -6,13 +6,12 @@ import assign from 'object-assign';
 
 // data storage - the values here are also the default settings
 let _data = OrderedMap({
-	debug          : true,
-	minSensitivity : 30,
-	maxSensitivity : 100,
-	sensitivity    : 50,
-	fps            : 10,
-	fpsInterval    : 100,    //  1000 / fps
-	pixelDensity   : 10
+	debug           : true,
+	sensitivity     : 67.5,   // sensitivity used when comparing pixels (note: this is converted to 0-100% on FE to make the values more clear)
+	fps             : 10,     // frames per second
+	fpsInterval     : 100,    // 1000 / fps = fpsInterval (used to throttle RAF loop)
+	pixelDensity    : 10,     // it is too CPU intensive to compare every pixel in frame, so instead we use this (ex: 640 / 10)
+	sustainedMotion : 3       // how many frames motion has to exist over to trigger a detection (helps avoid false alarms)
 });
 
 const SettingsStore = assign({}, BaseStore, {
@@ -33,6 +32,10 @@ const SettingsStore = assign({}, BaseStore, {
 				break;
 			case Constants.ActionTypes.SET_SENSITIVITY:
 				_data = _data.set('sensitivity', action.number);
+				SettingsStore.emitChange();
+				break;
+			case Constants.ActionTypes.SET_SUSTAINED:
+				_data = _data.set('sustainedMotion', action.number);
 				SettingsStore.emitChange();
 				break;
 			case Constants.ActionTypes.SET_PIXEL_DENSITY:

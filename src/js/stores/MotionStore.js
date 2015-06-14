@@ -7,6 +7,7 @@ import assign from 'object-assign';
 
 // data storage - the values here are also the default settings
 let _data = OrderedMap({
+	motionDetected: false,
 	width: 640,
 	height: 480,
 	motionZone: {top: 0, left: 0, width: 0, height: 0}   // used in debug mode to show what part of the frame we're detecting motion in
@@ -24,6 +25,12 @@ const MotionStore = assign({}, BaseStore, {
 			case Constants.ActionTypes.RAF:
 				if(action.raf !== _data.get('raf')) {
 					_data = _data.set('raf', action.raf);
+					MotionStore.emitChange();
+				}
+				break;
+			case Constants.ActionTypes.MOTION_DETECTED:
+				if(action.boolean !== _data.get('motionDetected')) {
+					_data = _data.set('motionDetected', action.boolean);
 					MotionStore.emitChange();
 				}
 				break;

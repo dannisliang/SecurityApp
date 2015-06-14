@@ -4,6 +4,7 @@ import Core from '../Core';
 
 export default {
 	addVideoSrc: function() {
+		// TODO: this should be handled in store not action
 		var that = this,
 			onSuccess = function(videoSrc) {
 				Dispatcher.handleViewAction({
@@ -36,10 +37,10 @@ export default {
 			motionZone: object
 		});
 	},
-	setMotionDetected: function(bool) {
+	setMotionDetected: function(boolean) {
 		Dispatcher.handleViewAction({
 			type: Constants.ActionTypes.MOTION_DETECTED,
-			motionDetected: bool
+			boolean: boolean
 		});
 	}
 };

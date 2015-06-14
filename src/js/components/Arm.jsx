@@ -79,7 +79,7 @@ export default React.createClass({
 			pixelDensity : this.state.pixelDensity
 		};
 		let motionComponent   = this.state.src ? <Motion {...motionProps} /> : null;
-		let settingsComponent = this.state.src ? <MotionSettings /> : null;
+		let settingsComponent = this.state.src ? <MotionSettings motionDetected={this.state.motionDetected} /> : null;
 		return (
 			<div id="arm-container">
 				<div id="buttons-container"><button onClick={this.handleGetVideoSrc}>Get Webcam Feed</button></div>

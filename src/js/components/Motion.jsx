@@ -66,6 +66,7 @@ export default React.createClass({
 			}
 			if(motionDetected && !this.props.debug) { break; }
 		}
+		MotionActions.setMotionDetected(motionDetected);
 		// set overall motion zone area to state if in debug mode (displays a box over the video showing where motion is being detected in the frame)
 		if(this.props.debug && motionDetected) {
 			let motionZoneTop    = motionZoneTopLeftY * this.props.pixelDensity;

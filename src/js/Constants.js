@@ -17,7 +17,8 @@ export default {
     SET_FPS: null,
     MOTION_ZONE: null,
     SET_PIXEL_DENSITY: null,
-    MOTION_DETECTED: null
+    MOTION_DETECTED: null,
+    SET_SUSTAINED: null
   }),
   // TODO: this will come in handy when be apis come into play
   ActionSources: keyMirror({

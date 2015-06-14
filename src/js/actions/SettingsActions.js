@@ -14,6 +14,12 @@ export default {
 			number: number
 		});
 	},
+	setSustained: function(number) {
+		Dispatcher.handleViewAction({
+			type: Constants.ActionTypes.SET_SUSTAINED,
+			number: number
+		});
+	},
 	setFPS: function(number) {
 		Dispatcher.handleViewAction({
 			type: Constants.ActionTypes.SET_FPS,
