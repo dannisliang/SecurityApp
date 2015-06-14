@@ -35,5 +35,11 @@ export default {
 			type: Constants.ActionTypes.MOTION_ZONE,
 			motionZone: object
 		});
+	},
+	setMotionDetected: function(bool) {
+		Dispatcher.handleViewAction({
+			type: Constants.ActionTypes.MOTION_DETECTED,
+			motionDetected: bool
+		});
 	}
 };

@@ -6,10 +6,13 @@ import assign from 'object-assign';
 
 // data storage - the values here are also the default settings
 let _data = OrderedMap({
-	debug        : true,
-	fps          : 10,
-	fpsInterval  : 100,    //  1000 / fps
-	pixelDensity : 10
+	debug          : true,
+	minSensitivity : 30,
+	maxSensitivity : 100,
+	sensitivity    : 50,
+	fps            : 10,
+	fpsInterval    : 100,    //  1000 / fps
+	pixelDensity   : 10
 });
 
 const SettingsStore = assign({}, BaseStore, {
@@ -26,6 +29,14 @@ const SettingsStore = assign({}, BaseStore, {
 					fps         : action.fps,
 					fpsInterval : 1000 / action.fps
 				});
+				SettingsStore.emitChange();
+				break;
+			case Constants.ActionTypes.SET_SENSITIVITY:
+				_data = _data.set('sensitivity', action.number);
+				SettingsStore.emitChange();
+				break;
+			case Constants.ActionTypes.SET_PIXEL_DENSITY:
+				_data = _data.set('pixelDensity', action.pixelDensity);
 				SettingsStore.emitChange();
 				break;
 			case Constants.ActionTypes.TOGGLE_DEBUG:

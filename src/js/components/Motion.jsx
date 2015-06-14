@@ -37,19 +37,21 @@ export default React.createClass({
 	compareFrames: function(previousFrame, currentFrame) {
 		if(!previousFrame || !currentFrame) { return; }
 		// reset vars
-		var motionDetected = false,
+		var captureWidth = this.props.width / this.props.pixelDensity,
+			captureHeight = this.props.height / this.props.pixelDensity,
+			motionDetected = false,
 			motionZoneTopLeftX = Infinity,
 			motionZoneTopLeftY = Infinity,
 			motionZoneBottomRightX = 0,
 			motionZoneBottomRightY = 0;
 		// clear & draw
-		this.previousFrameCanvasContext.clearRect(0,0, 64, 48);
-		this.currentFrameCanvasContext.clearRect(0,0, 64, 48);
-		this.previousFrameCanvasContext.drawImage(previousFrame, 0, 0, 64, 48);
-		this.currentFrameCanvasContext.drawImage(currentFrame, 0, 0, 64, 48);
+		this.previousFrameCanvasContext.clearRect(0,0, captureWidth, captureHeight);
+		this.currentFrameCanvasContext.clearRect(0,0, captureWidth, captureHeight);
+		this.previousFrameCanvasContext.drawImage(previousFrame, 0, 0, captureWidth, captureHeight);
+		this.currentFrameCanvasContext.drawImage(currentFrame, 0, 0, captureWidth, captureHeight);
 		// compare pixels
-		for(var y=0, l=48; y<l; y++) {
-			for(var x=0, l2=64; x<l2; x++) {
+		for(var y=0, l=captureHeight; y<l; y++) {
+			for(var x=0, l2=captureWidth; x<l2; x++) {
 				var pixel1 = this.previousFrameCanvasContext.getImageData(x, y, 1, 1).data,
 					pixel2 = this.currentFrameCanvasContext.getImageData(x, y, 1, 1).data;
 				if(!this.comparePixels(pixel1, pixel2)) {
@@ -66,10 +68,10 @@ export default React.createClass({
 		}
 		// set overall motion zone area to state if in debug mode (displays a box over the video showing where motion is being detected in the frame)
 		if(this.props.debug && motionDetected) {
-			let motionZoneTop    = motionZoneTopLeftY * 10;
-			let motionZoneLeft   = motionZoneTopLeftX * 10;
-			let motionZoneWidth  = (motionZoneBottomRightX * 10) - motionZoneLeft;
-			let motionZoneHeight = (motionZoneBottomRightY * 10) - motionZoneTop;
+			let motionZoneTop    = motionZoneTopLeftY * this.props.pixelDensity;
+			let motionZoneLeft   = motionZoneTopLeftX * this.props.pixelDensity;
+			let motionZoneWidth  = (motionZoneBottomRightX * this.props.pixelDensity) - motionZoneLeft;
+			let motionZoneHeight = (motionZoneBottomRightY * this.props.pixelDensity) - motionZoneTop;
 			MotionActions.motionZone({
 				top    : motionZoneTop,
 				left   : motionZoneLeft,
@@ -81,9 +83,9 @@ export default React.createClass({
 	comparePixels: function(pixel1, pixel2) {
 		var matches = true;
 		for(var i=0, l=pixel1.length; i<l; i++) {
-			var t1 = Math.round(pixel1[i]/10)*10,
-				t2 = Math.round(pixel2[i]/10)*10;
-			if(t1 !== t2 && (t1 + 40 < t2 || t1 - 40 > t2)) {
+			var t1 = Math.round(pixel1[i] / this.props.pixelDensity) * this.props.pixelDensity,
+				t2 = Math.round(pixel2[i] / this.props.pixelDensity) * this.props.pixelDensity;
+			if(t1 !== t2 && (t1 + this.props.sensitivity < t2 || t1 - this.props.sensitivity > t2)) {
 				matches = false;
 			}
 		}

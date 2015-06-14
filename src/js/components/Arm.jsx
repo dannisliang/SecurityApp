@@ -62,16 +62,21 @@ export default React.createClass({
 	// RENDERING ////////////////////////////
 	render: function() {
 		let motionProps = {
+			width         : this.state.width,
+			height        : this.state.height,
 			raf           : this.state.raf,
 			debug         : this.state.debug,
+			sensitivity   : this.state.sensitivity,
 			currentFrame  : this.state.currentFrame,
-			previousFrame : this.state.previousFrame
+			previousFrame : this.state.previousFrame,
+			pixelDensity  : this.state.pixelDensity
 		};
 		let videoProps = {
-			width   : 640,  // TODO: move to store
-			height  : 480,  // TODO: move to store
-			src     : this.state.src,
-			raf     : this.state.raf
+			width        : this.state.width,
+			height       : this.state.height,
+			src          : this.state.src,
+			raf          : this.state.raf,
+			pixelDensity : this.state.pixelDensity
 		};
 		let motionComponent   = this.state.src ? <Motion {...motionProps} /> : null;
 		let settingsComponent = this.state.src ? <MotionSettings /> : null;

@@ -15,7 +15,9 @@ export default {
     RAF: null,
     TOGGLE_DEBUG: null,
     SET_FPS: null,
-    MOTION_ZONE: null
+    MOTION_ZONE: null,
+    SET_PIXEL_DENSITY: null,
+    MOTION_DETECTED: null
   }),
   // TODO: this will come in handy when be apis come into play
   ActionSources: keyMirror({

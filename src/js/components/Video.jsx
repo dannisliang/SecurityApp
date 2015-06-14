@@ -7,14 +7,10 @@ var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
 	mixins: [PureRenderMixin],
-	// LOCAL VARS ///////////////////////////
-	captureWidth  : null,
-	captureHeight : null,
-	pixelAccuracy : 10,     // the lower this is the more accurate it will be, but slower
 	// LIFECYCLE ////////////////////////////
 	componentDidMount: function() {
-		this.captureWidth = this.props.width / 10;
-		this.captureHeight = this.props.height / 10;
+		this.captureWidth  = this.props.width / this.props.pixelDensity;
+		this.captureHeight = this.props.height / this.props.pixelDensity;
 	},
 	componentWillReceiveProps: function(nextProps) {
 		if(nextProps.src && !this.props.src) {
