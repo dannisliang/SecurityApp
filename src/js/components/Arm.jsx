@@ -69,8 +69,8 @@ export default React.createClass({
 	// RENDERING ////////////////////////////
 	render: function() {
 		let motionProps = {
-			width         : this.state.width,
-			height        : this.state.height,
+			videoWidth    : this.state.videoWidth,
+			videoHeight   : this.state.videoHeight,
 			raf           : this.state.raf,
 			debug         : this.state.debug,
 			sensitivity   : this.state.sensitivity,
@@ -79,8 +79,8 @@ export default React.createClass({
 			pixelDensity  : this.state.pixelDensity
 		};
 		let videoProps = {
-			width        : this.state.width,
-			height       : this.state.height,
+			videoWidth   : this.state.videoWidth,
+			videoHeight  : this.state.videoHeight,
 			src          : this.state.src,
 			raf          : this.state.raf,
 			pixelDensity : this.state.pixelDensity

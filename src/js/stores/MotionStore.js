@@ -32,6 +32,13 @@ const MotionStore = assign({}, BaseStore, {
 					MotionStore.emitChange();
 				}
 				break;
+			case Constants.ActionTypes.VIDEO_RESIZE:
+				_data = _data.merge({
+					videoWidth  : action.array[0],
+					videoHeight : action.array[1]
+				});
+				MotionStore.emitChange();
+				break;
 			case Constants.ActionTypes.MOTION_ZONE:
 				_data = _data.set('motionZone', action.motionZone);
 				MotionStore.emitChange();

@@ -7,7 +7,7 @@ export default React.createClass({
 	// RENDERING ////////////////////////////
 	render: function() {
 		let style = {
-			backgroundSize: (this.props.width / this.props.pixelDensity)+'px '+(this.props.height / this.props.pixelDensity)+'px'
+			backgroundSize: (this.props.width / (this.props.width / this.props.pixelDensity))+'px '+(this.props.height / (this.props.height / this.props.pixelDensity))+'px'
 		};
 		return (
 			<div id="pixel-density-grid" className="fill absolute" style={style}></div>

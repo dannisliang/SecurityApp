@@ -19,9 +19,8 @@ export default React.createClass({
 	// LIFECYCLE //////////////////////////
 	componentDidMount: function() {
 		MotionStore.addChangeListener(this._onChange);
-		// by setting the prev/next frame canvases here we avoid finding them during RAF
-		this.previousFrameCanvasContext = React.findDOMNode(this.refs.previousFrameCanvas).getContext('2d');
-		this.currentFrameCanvasContext  = React.findDOMNode(this.refs.currentFrameCanvas).getContext('2d');
+		this.previousFrameCanvas = React.findDOMNode(this.refs.previousFrameCanvas);
+		this.currentFrameCanvas = React.findDOMNode(this.refs.currentFrameCanvas);
 	},
 	componentWillReceiveProps: function(nextProps) {
 		//console.log('props');
@@ -37,20 +36,28 @@ export default React.createClass({
 	compareFrames: function(previousFrame, currentFrame) {
 		if(!previousFrame || !currentFrame) { return; }
 		// reset vars
-		var captureWidth = this.props.width / this.props.pixelDensity,
-			captureHeight = this.props.height / this.props.pixelDensity,
+		console.log('compare');
+		var captureWidth = this.props.videoWidth / this.props.pixelDensity,
+			captureHeight = this.props.videoHeight / this.props.pixelDensity,
+			previousFrameCanvasContext = this.previousFrameCanvas.getContext('2d'),
+			currentFrameCanvasContext = this.currentFrameCanvas.getContext('2d'),
 			motionDetected = false,
 			motionZoneTopLeftX = Infinity,
 			motionZoneTopLeftY = Infinity,
 			motionZoneBottomRightX = 0,
 			motionZoneBottomRightY = 0;
 		// clear & draw
-		this.previousFrameCanvasContext.clearRect(0,0, captureWidth, captureHeight);
-		this.currentFrameCanvasContext.clearRect(0,0, captureWidth, captureHeight);
-		this.previousFrameCanvasContext.drawImage(previousFrame, 0, 0, captureWidth, captureHeight);
-		this.currentFrameCanvasContext.drawImage(currentFrame, 0, 0, captureWidth, captureHeight);
+		this.previousFrameCanvas.width = captureWidth;
+		this.previousFrameCanvas.height = captureHeight;
+		this.currentFrameCanvas.width = captureWidth;
+		this.currentFrameCanvas.height = captureHeight;
+		React.findDOMNode(this.refs.currentFrameCanvas).height = captureHeight;
+		previousFrameCanvasContext.clearRect(0, 0, 9999, 9999);
+		currentFrameCanvasContext.clearRect(0, 0, 9999, 9999);
+		previousFrameCanvasContext.drawImage(previousFrame, 0, 0, previousFrame.width, previousFrame.height);
+		currentFrameCanvasContext.drawImage(currentFrame, 0, 0, currentFrame.width, currentFrame.height);
 		// compare pixels
-		for(var y=0, l=captureHeight; y<l; y++) {
+		/*for(var y=0, l=captureHeight; y<l; y++) {
 			for(var x=0, l2=captureWidth; x<l2; x++) {
 				var pixel1 = this.previousFrameCanvasContext.getImageData(x, y, 1, 1).data,
 					pixel2 = this.currentFrameCanvasContext.getImageData(x, y, 1, 1).data;
@@ -79,7 +86,7 @@ export default React.createClass({
 				width  : motionZoneWidth,
 				height : motionZoneHeight
 			});
-		}
+		}*/
 	},
 	comparePixels: function(pixel1, pixel2) {
 		var matches = true;
@@ -96,7 +103,7 @@ export default React.createClass({
 	render: function() {
 		let motionBoxComponent = this.state.motionZone ? <MotionBox motionZone={this.state.motionZone} /> : null;
 		return (
-			<div id="motion-container" className="video-cover absolute">
+			<div id="motion-container" className="absolute">
 				<canvas ref="previousFrameCanvas"></canvas>
 				<canvas ref="currentFrameCanvas"></canvas>
 				{motionBoxComponent}

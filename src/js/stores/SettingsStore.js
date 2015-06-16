@@ -8,11 +8,11 @@ import assign from 'object-assign';
 let _data = OrderedMap({
 	width           : window.innerWidth,
 	height          : window.innerHeight,
-	debug           : true,
+	debug           : false,
 	sensitivity     : 67.5,   // sensitivity used when comparing pixels (note: this is converted to 0-100% on FE to make the values more clear)
-	fps             : 10,     // frames per second
-	fpsInterval     : 100,    // 1000 / fps = fpsInterval (used to throttle RAF loop)
-	pixelDensity    : 10,     // it is too CPU intensive to compare every pixel in frame, so instead we use this (ex: 640 / 10)
+	fps             : 1,     // frames per second
+	fpsInterval     : 1000,    // 1000 / fps = fpsInterval (used to throttle RAF loop)
+	pixelDensity    : 4,     // it is too CPU intensive to compare every pixel in frame, so instead we use this (ex: 640 / 10)
 	sustainedMotion : 3       // how many frames motion has to exist over to trigger a detection (helps avoid false alarms)
 });
 

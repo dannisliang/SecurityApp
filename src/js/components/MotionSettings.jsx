@@ -69,7 +69,7 @@ export default React.createClass({
 					{this.state.fps}
 				</div><div>
 					<label>Pixel Density</label>
-					<input type="range" min="2" max="15" defaultValue={this.state.pixelDensity} onChange={this.handleChangePixelDensity} />
+					<input type="range" min="4" max="15" defaultValue={this.state.pixelDensity} onChange={this.handleChangePixelDensity} />
 					{this.state.pixelDensity}
 				</div>
 				{motionDetected}

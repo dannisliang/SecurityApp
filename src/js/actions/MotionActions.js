@@ -42,5 +42,11 @@ export default {
 			type: Constants.ActionTypes.MOTION_DETECTED,
 			boolean: boolean
 		});
+	},
+	videoResize: function(array) {   // expects [width, height]
+		Dispatcher.handleViewAction({
+			type: Constants.ActionTypes.VIDEO_RESIZE,
+			array: array
+		});
 	}
 };
