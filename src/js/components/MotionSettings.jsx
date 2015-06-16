@@ -11,7 +11,7 @@ export default React.createClass({
 	getDefaultProps: function() {
 		return {
 			minSensitivity: 25,
-			maxSensitivity: 110
+			maxSensitivity: 195
 		};
 	},
 	// INITIAL STATE //////////////////////
@@ -53,7 +53,7 @@ export default React.createClass({
 		let sensitivityPercent = Math.round(100 - (((this.state.sensitivity - this.props.minSensitivity) * 100) / (this.props.maxSensitivity - this.props.minSensitivity)));
 		let motionDetected = this.props.motionDetected ? 'Motion detected' : 'All clear';
 		return (
-			<div id="settings-container">
+			<div id="settings-container" className="absolute">
 				<div>
 					<button onClick={this.handleToggleDebug}>Toggle Debug</button>
 				</div><div>

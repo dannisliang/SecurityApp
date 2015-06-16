@@ -9,7 +9,7 @@ import React from 'react';
 export default React.createClass({
   render: function() {
     return (
-      <header>
+      <header className="absolute">
         <a href='/'>Home</a>
         <a href='arm'>Arm</a>
         <a href='images'>Images</a>

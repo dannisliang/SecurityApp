@@ -6,6 +6,8 @@ import assign from 'object-assign';
 
 // data storage - the values here are also the default settings
 let _data = OrderedMap({
+	width           : window.innerWidth,
+	height          : window.innerHeight,
 	debug           : true,
 	sensitivity     : 67.5,   // sensitivity used when comparing pixels (note: this is converted to 0-100% on FE to make the values more clear)
 	fps             : 10,     // frames per second
@@ -44,6 +46,13 @@ const SettingsStore = assign({}, BaseStore, {
 				break;
 			case Constants.ActionTypes.TOGGLE_DEBUG:
 				_data = _data.set('debug', !_data.get('debug'));
+				SettingsStore.emitChange();
+				break;
+			case Constants.ActionTypes.RESIZE:
+				_data = _data.merge({
+					width  : window.innerWidth,
+					height : window.innerHeight
+				});
 				SettingsStore.emitChange();
 				break;
 		}

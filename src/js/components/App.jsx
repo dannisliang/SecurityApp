@@ -10,7 +10,7 @@ import Navigation from './Navigation.jsx';
 export default React.createClass({
   render: function () {
     return (
-      <div>
+      <div className="fill">
         <Navigation/>
         <ContentRouter history={true} />
       </div>

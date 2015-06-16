@@ -18,7 +18,8 @@ export default {
     MOTION_ZONE: null,
     SET_PIXEL_DENSITY: null,
     MOTION_DETECTED: null,
-    SET_SUSTAINED: null
+    SET_SUSTAINED: null,
+    RESIZE: null
   }),
   // TODO: this will come in handy when be apis come into play
   ActionSources: keyMirror({

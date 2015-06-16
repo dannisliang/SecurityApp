@@ -36,8 +36,8 @@ export default React.createClass({
 	// RENDERING ////////////////////////
 	render: function() {
 		return (
-			<div id="video-container">
-				<video ref="video" width={this.props.width} height={this.props.height} muted src={this.props.src}></video>
+			<div id="video-container" className="fill absolute">
+				<video ref="video" className="video-cover" muted src={this.props.src}></video>
 			</div>
 		);
 	},

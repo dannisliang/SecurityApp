@@ -96,7 +96,7 @@ export default React.createClass({
 	render: function() {
 		let motionBoxComponent = this.state.motionZone ? <MotionBox motionZone={this.state.motionZone} /> : null;
 		return (
-			<div id="motion-container">
+			<div id="motion-container" className="video-cover absolute">
 				<canvas ref="previousFrameCanvas"></canvas>
 				<canvas ref="currentFrameCanvas"></canvas>
 				{motionBoxComponent}
