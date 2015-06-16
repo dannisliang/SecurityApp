@@ -1,7 +1,6 @@
 import React from 'react';
 import Video from './Video.jsx';
 import Motion from './Motion.jsx';
-import PixelDensityGrid from './PixelDensityGrid.jsx';
 import MotionSettings from './MotionSettings.jsx';
 import MotionStore from '../stores/MotionStore';
 import SettingsStore from '../stores/SettingsStore';
@@ -76,28 +75,22 @@ export default React.createClass({
 			sensitivity   : this.state.sensitivity,
 			currentFrame  : this.state.currentFrame,
 			previousFrame : this.state.previousFrame,
-			pixelDensity  : this.state.pixelDensity
+			motionZoneDensity  : this.state.motionZoneDensity
 		};
 		let videoProps = {
 			videoWidth   : this.state.videoWidth,
 			videoHeight  : this.state.videoHeight,
 			src          : this.state.src,
 			raf          : this.state.raf,
-			pixelDensity : this.state.pixelDensity
-		};
-		let pixelDensityProps = {
-			width        : this.state.width,
-			height       : this.state.height,
-			pixelDensity : this.state.pixelDensity
+			motionZoneDensity : this.state.motionZoneDensity
 		};
 		let motionComponent   = this.state.src ? <Motion {...motionProps} /> : null;
 		let settingsComponent = this.state.src ? <MotionSettings motionDetected={this.state.motionDetected} /> : null;
 		return (
 			<div id="arm-container" className="fill">
 				<div id="buttons-container" className="absolute"><button onClick={this._handleGetVideoSrc}>Get Webcam Feed</button></div>
-				<div id="video-and-motion-container" className="fill absolute">
+				<div id="video-and-motion-container" className="video-cover absolute">
 					<Video {...videoProps} />
-					<PixelDensityGrid {...pixelDensityProps} />
 					{motionComponent}
 				</div>
 				{settingsComponent}

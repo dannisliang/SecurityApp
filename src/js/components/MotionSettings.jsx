@@ -45,7 +45,7 @@ export default React.createClass({
 		SettingsActions.setFPS(event.target.value);
 	},
 	handleChangePixelDensity: function(event) {
-		SettingsActions.setPixelDensity(event.target.value);
+		SettingsActions.setMotionZoneDensity(event.target.value);
 	},
 	// RENDERING ////////////////////////
 	render: function() {
@@ -69,8 +69,8 @@ export default React.createClass({
 					{this.state.fps}
 				</div><div>
 					<label>Pixel Density</label>
-					<input type="range" min="4" max="15" defaultValue={this.state.pixelDensity} onChange={this.handleChangePixelDensity} />
-					{this.state.pixelDensity}
+					<input type="range" min="4" max="15" defaultValue={this.state.motionZoneDensity} onChange={this.handleChangePixelDensity} />
+					{this.state.motionZoneDensity}
 				</div>
 				{motionDetected}
 			</div>

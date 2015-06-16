@@ -8,6 +8,7 @@ import assign from 'object-assign';
 // data storage - the values here are also the default settings
 let _data = OrderedMap({
 	motionDetected: false,
+	motionZones: [],
 	motionZone: {top: 0, left: 0, width: 0, height: 0}   // used in debug mode to show what part of the frame we're detecting motion in
 });
 
@@ -26,6 +27,10 @@ const MotionStore = assign({}, BaseStore, {
 					MotionStore.emitChange();
 				}
 				break;
+			case Constants.ActionTypes.MOTION_ZONES:
+				_data = _data.set('motionZones', action.array);
+				MotionStore.emitChange();
+				break;
 			case Constants.ActionTypes.MOTION_DETECTED:
 				if(action.boolean !== _data.get('motionDetected')) {
 					_data = _data.set('motionDetected', action.boolean);
@@ -37,10 +42,6 @@ const MotionStore = assign({}, BaseStore, {
 					videoWidth  : action.array[0],
 					videoHeight : action.array[1]
 				});
-				MotionStore.emitChange();
-				break;
-			case Constants.ActionTypes.MOTION_ZONE:
-				_data = _data.set('motionZone', action.motionZone);
 				MotionStore.emitChange();
 				break;
 			case Constants.ActionTypes.ADD_VIDEO_SRC:

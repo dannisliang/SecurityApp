@@ -6,14 +6,13 @@ import assign from 'object-assign';
 
 // data storage - the values here are also the default settings
 let _data = OrderedMap({
-	width           : window.innerWidth,
-	height          : window.innerHeight,
-	debug           : false,
-	sensitivity     : 67.5,   // sensitivity used when comparing pixels (note: this is converted to 0-100% on FE to make the values more clear)
-	fps             : 1,     // frames per second
-	fpsInterval     : 1000,    // 1000 / fps = fpsInterval (used to throttle RAF loop)
-	pixelDensity    : 4,     // it is too CPU intensive to compare every pixel in frame, so instead we use this (ex: 640 / 10)
-	sustainedMotion : 3       // how many frames motion has to exist over to trigger a detection (helps avoid false alarms)
+	width             : window.innerWidth,
+	height            : window.innerHeight,
+	debug             : false,
+	sensitivity       : 67.5,   // sensitivity used when comparing pixels (note: this is converted to 0-100% on FE to make the values more clear)
+	fps               : 8,     // frames per second
+	fpsInterval       : 125,    // 1000 / fps = fpsInterval (used to throttle RAF loop)
+	motionZoneDensity : 15     // it is too CPU intensive to compare every pixel in frame, so instead we use this (ex: 640 / 10)
 });
 
 const SettingsStore = assign({}, BaseStore, {
@@ -36,12 +35,8 @@ const SettingsStore = assign({}, BaseStore, {
 				_data = _data.set('sensitivity', action.number);
 				SettingsStore.emitChange();
 				break;
-			case Constants.ActionTypes.SET_SUSTAINED:
-				_data = _data.set('sustainedMotion', action.number);
-				SettingsStore.emitChange();
-				break;
-			case Constants.ActionTypes.SET_PIXEL_DENSITY:
-				_data = _data.set('pixelDensity', action.pixelDensity);
+			case Constants.ActionTypes.MOTION_ZONE_DENSITY:
+				_data = _data.set('motionZoneDensity', action.number);
 				SettingsStore.emitChange();
 				break;
 			case Constants.ActionTypes.TOGGLE_DEBUG:

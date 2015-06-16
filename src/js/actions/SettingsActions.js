@@ -26,10 +26,10 @@ export default {
 			fps: number
 		});
 	},
-	setPixelDensity: function(number) {
+	setMotionZoneDensity: function(number) {
 		Dispatcher.handleViewAction({
-			type: Constants.ActionTypes.SET_PIXEL_DENSITY,
-			pixelDensity: number
+			type: Constants.ActionTypes.MOTION_ZONE_DENSITY,
+			number: number
 		});
 	}
 };

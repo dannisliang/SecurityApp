@@ -48,5 +48,11 @@ export default {
 			type: Constants.ActionTypes.VIDEO_RESIZE,
 			array: array
 		});
+	},
+	setMotionZones: function(array) {
+		Dispatcher.handleViewAction({
+			type: Constants.ActionTypes.MOTION_ZONES,
+			array: array
+		});
 	}
 };

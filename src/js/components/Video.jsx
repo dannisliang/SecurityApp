@@ -17,7 +17,7 @@ export default React.createClass({
 	},
 	componentWillReceiveProps: function(nextProps) {
 		if(nextProps.src && !this.props.src) {
-			setTimeout(this.play, 0); // timeout here to allow src to be set on the video element before we try to play it
+			setTimeout(this._handlePlay, 0);  // delay here to allow src to be set on element before trying to play it
 		}
 		if(nextProps.raf && !this.props.raf) {
 			this.captureFrame();
@@ -32,14 +32,24 @@ export default React.createClass({
 		]);
 	},
 	// METHODS ///////////////////////////////
-	play: function() {
-		React.findDOMNode(this.refs.video).play();
+	_handlePlay: function() {
+		let that = this,
+			videoNode = React.findDOMNode(this.refs.video);
+		// play webcam feed
+		videoNode.play();
+		// poll to check when video is actually playing so we can update video width/height with real values
+		let videoReadyInterval = window.setInterval(function() {
+			if(videoNode.readyState === 4) {
+				that._onResize();
+				window.clearInterval(videoReadyInterval);
+			}
+		}, 100);
 	},
 	captureFrame: function() {
 		var canvas        = document.createElement('canvas'),
 			video         = React.findDOMNode(this.refs.video),
-			captureWidth  = this.props.videoWidth / this.props.pixelDensity,
-			captureHeight = this.props.videoHeight / this.props.pixelDensity;
+			captureWidth  = this.props.videoWidth / this.props.motionZoneDensity,
+			captureHeight = this.props.videoHeight / this.props.motionZoneDensity;
 		canvas.width  = captureWidth;
 		canvas.height = captureHeight;
 		canvas.getContext('2d').drawImage(video, 0, 0, captureWidth, captureHeight);
@@ -50,10 +60,14 @@ export default React.createClass({
 		let canvasStyle = {
 			position: 'absolute',
 			bottom: 0
-		}
+		};
 		return (
-			<div id="video-container" className="fill absolute">
-				<video ref="video" className="video-cover" muted src={this.props.src}></video>
+			<div id="video-container" className="absolute fill">
+				<div className="table fill">
+					<div className="table-cell-valign">
+						<video ref="video" muted src={this.props.src}></video>
+					</div>
+				</div>
 			</div>
 		);
 	},

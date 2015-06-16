@@ -3,7 +3,7 @@ import Addons from 'react/addons';
 import Constants from '../Constants';
 import MotionStore from '../stores/MotionStore';
 import MotionActions from '../actions/MotionActions';
-import MotionBox from './MotionBox.jsx';
+import MotionZonesGrid from './MotionZonesGrid.jsx';
 var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
@@ -36,63 +36,40 @@ export default React.createClass({
 	compareFrames: function(previousFrame, currentFrame) {
 		if(!previousFrame || !currentFrame) { return; }
 		// reset vars
-		console.log('compare');
-		var captureWidth = this.props.videoWidth / this.props.pixelDensity,
-			captureHeight = this.props.videoHeight / this.props.pixelDensity,
+		let motionZones = [],
+			captureWidth = this.props.videoWidth / this.props.motionZoneDensity,
+			captureHeight = this.props.videoHeight / this.props.motionZoneDensity,
 			previousFrameCanvasContext = this.previousFrameCanvas.getContext('2d'),
-			currentFrameCanvasContext = this.currentFrameCanvas.getContext('2d'),
-			motionDetected = false,
-			motionZoneTopLeftX = Infinity,
-			motionZoneTopLeftY = Infinity,
-			motionZoneBottomRightX = 0,
-			motionZoneBottomRightY = 0;
-		// clear & draw
-		this.previousFrameCanvas.width = captureWidth;
+			currentFrameCanvasContext = this.currentFrameCanvas.getContext('2d');
+		// set proper w/h for canvas before clearing/drawing
+		this.previousFrameCanvas.width  = captureWidth;
 		this.previousFrameCanvas.height = captureHeight;
-		this.currentFrameCanvas.width = captureWidth;
-		this.currentFrameCanvas.height = captureHeight;
-		React.findDOMNode(this.refs.currentFrameCanvas).height = captureHeight;
+		this.currentFrameCanvas.width   = captureWidth;
+		this.currentFrameCanvas.height  = captureHeight;
+		// clear previous canvas
 		previousFrameCanvasContext.clearRect(0, 0, 9999, 9999);
 		currentFrameCanvasContext.clearRect(0, 0, 9999, 9999);
 		previousFrameCanvasContext.drawImage(previousFrame, 0, 0, previousFrame.width, previousFrame.height);
 		currentFrameCanvasContext.drawImage(currentFrame, 0, 0, currentFrame.width, currentFrame.height);
-		// compare pixels
-		/*for(var y=0, l=captureHeight; y<l; y++) {
+		// compare pixels in frame canvases
+		for(var y=0, l=captureHeight; y<l; y++) {
 			for(var x=0, l2=captureWidth; x<l2; x++) {
-				var pixel1 = this.previousFrameCanvasContext.getImageData(x, y, 1, 1).data,
-					pixel2 = this.currentFrameCanvasContext.getImageData(x, y, 1, 1).data;
+				var pixel1 = previousFrameCanvasContext.getImageData(x, y, 1, 1).data,
+					pixel2 = currentFrameCanvasContext.getImageData(x, y, 1, 1).data;
 				if(!this.comparePixels(pixel1, pixel2)) {
-					motionDetected = true;
-					if(!this.props.debug) { break; }
-					// set motion zone corners if in debug mode
-					if(x < motionZoneTopLeftX) { motionZoneTopLeftX = x; }
-					if(y < motionZoneTopLeftY) { motionZoneTopLeftY = y; }
-					if(x > motionZoneBottomRightX) { motionZoneBottomRightX = x; }
-					if(y > motionZoneBottomRightY) { motionZoneBottomRightY = y; }
+					motionZones.push({x: x, y:y});
 				}
 			}
-			if(motionDetected && !this.props.debug) { break; }
 		}
-		MotionActions.setMotionDetected(motionDetected);
-		// set overall motion zone area to state if in debug mode (displays a box over the video showing where motion is being detected in the frame)
-		if(this.props.debug && motionDetected) {
-			let motionZoneTop    = motionZoneTopLeftY * this.props.pixelDensity;
-			let motionZoneLeft   = motionZoneTopLeftX * this.props.pixelDensity;
-			let motionZoneWidth  = (motionZoneBottomRightX * this.props.pixelDensity) - motionZoneLeft;
-			let motionZoneHeight = (motionZoneBottomRightY * this.props.pixelDensity) - motionZoneTop;
-			MotionActions.motionZone({
-				top    : motionZoneTop,
-				left   : motionZoneLeft,
-				width  : motionZoneWidth,
-				height : motionZoneHeight
-			});
-		}*/
+		if(motionZones.length) {
+			MotionActions.setMotionZones(motionZones);
+		}
 	},
 	comparePixels: function(pixel1, pixel2) {
 		var matches = true;
 		for(var i=0, l=pixel1.length; i<l; i++) {
-			var t1 = Math.round(pixel1[i] / this.props.pixelDensity) * this.props.pixelDensity,
-				t2 = Math.round(pixel2[i] / this.props.pixelDensity) * this.props.pixelDensity;
+			var t1 = Math.round(pixel1[i] / this.props.motionZoneDensity) * this.props.motionZoneDensity,
+				t2 = Math.round(pixel2[i] / this.props.motionZoneDensity) * this.props.motionZoneDensity;
 			if(t1 !== t2 && (t1 + this.props.sensitivity < t2 || t1 - this.props.sensitivity > t2)) {
 				matches = false;
 			}
@@ -101,12 +78,17 @@ export default React.createClass({
 	},
 	// RENDERING ////////////////////////////
 	render: function() {
-		let motionBoxComponent = this.state.motionZone ? <MotionBox motionZone={this.state.motionZone} /> : null;
+		let motionZoneDensityProps = {
+			videoWidth   : this.state.videoWidth,
+			videoHeight  : this.state.videoHeight,
+			motionZones  : this.state.motionZones,
+			motionZoneDensity : this.props.motionZoneDensity
+		};
 		return (
-			<div id="motion-container" className="absolute">
-				<canvas ref="previousFrameCanvas"></canvas>
-				<canvas ref="currentFrameCanvas"></canvas>
-				{motionBoxComponent}
+			<div id="motion-container" className="fill absolute">
+				<canvas ref="previousFrameCanvas" className="absolute"></canvas>
+				<canvas ref="currentFrameCanvas" className="absolute"></canvas>
+				<MotionZonesGrid {...motionZoneDensityProps} />
 			</div>
 		);
 	},

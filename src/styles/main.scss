@@ -3,19 +3,28 @@
 @import "compass/css3/transform";
 @import "compass/css3/images";
 
-$primary-color: green;
-
+$primary-color: #FFF;
+$grid-line-color: rgba(255,255,255,0.1s);
+body {
+	color: $primary-color;
+	background: #000;
+}
 h1 {
 	@include transition(height 0.5s linear);
-  color: $primary-color;
 }
-
+.table {
+	display: table;
+}
+.table-cell-valign {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
 li.task {
-  list-style-type: none;
-
-  label {
-    padding: 0 10px;
-  }
+	list-style-type: none;
+	label {
+		padding: 0 10px;
+	}
 }
 .fill, body, html {
 	width: 100%;
@@ -32,7 +41,7 @@ header {
 }
 #motion-box {
 	position: absolute;
-	background: rgba(255,255,255,0.5);
+	background: rgba(255,255,255,0.3);
 }
 .video-cover {
 	@include translate(-50%, -50%);
@@ -44,13 +53,12 @@ header {
 	height: auto;
 	z-index: -100;
 }
-#pixel-density-grid {
-	// background grid from https://codepen.io/jasonadelia/pen/DnrAe
-	@include background-image(linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.5) 25%, rgba(255, 255, 255, 0.5) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.5) 75%, rgba(255, 255, 255, 0.5) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.5) 25%, rgba(255, 255, 255, 0.5) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.5) 75%, rgba(255, 255, 255, 0.5) 76%, transparent 77%, transparent));
+#motion-zone-grid {
+	// background grid from http://jsfiddle.net/2kmUg/1/
+	@include background-image(repeating-linear-gradient(0deg, $grid-line-color, $grid-line-color 1px, transparent 1px, transparent 40px),repeating-linear-gradient(-90deg, $grid-line-color, $grid-line-color 1px, transparent 1px, transparent 40px));
 	background-color: transparent;
-}
-#pixel-density-grid, #motion-container {
-	position: absolute;
+	width: 100%;
+	position: relative;
 }
 #settings-container {
 	right: 0;
@@ -60,7 +68,13 @@ header {
 	z-index: 99;
 	right: 0;
 }
-
-canvas:nth-child(2) {
-	//display: none;
+video {
+	width: 100%;
+	//max-height: 100%;
+}
+.motion-zone {
+	background: #FFF;
+}
+#motion-zones-canvas {
+	opacity: 0.5;
 }
