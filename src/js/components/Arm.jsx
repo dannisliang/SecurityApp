@@ -25,7 +25,7 @@ export default React.createClass({
 		window.removeEventListener('resize', this._onResize);
 	},
 	componentDidUpdate: function(prevProps, prevState) {
-		if(this.state.src && !prevState.src) {
+		if(this.state.playing && !prevState.playing) {
 			this._handleStartRAF();  // now that video src is set and playing we should start the RAF loop so motion detection can use it
 		}
 	},
@@ -58,9 +58,7 @@ export default React.createClass({
 				// throttle RAF to FPS
 				if(elapsed > that.state.fpsInterval) {
 					that.then = now - (elapsed % that.state.fpsInterval);
-					MotionActions.onRAF(true);  // dispatch raf event for stores to listen for
-				} else {
-					MotionActions.onRAF(false);
+					MotionActions.onRAF();
 				}
 			};
 		renderRAF();
@@ -70,7 +68,6 @@ export default React.createClass({
 		let motionProps = {
 			videoWidth    : this.state.videoWidth,
 			videoHeight   : this.state.videoHeight,
-			raf           : this.state.raf,
 			debug         : this.state.debug,
 			sensitivity   : this.state.sensitivity,
 			currentFrame  : this.state.currentFrame,
@@ -81,7 +78,6 @@ export default React.createClass({
 			videoWidth   : this.state.videoWidth,
 			videoHeight  : this.state.videoHeight,
 			src          : this.state.src,
-			raf          : this.state.raf,
 			motionZoneDensity : this.state.motionZoneDensity
 		};
 		let motionComponent   = this.state.src ? <Motion {...motionProps} /> : null;
@@ -89,8 +85,9 @@ export default React.createClass({
 		return (
 			<div id="arm-container" className="fill">
 				<div id="buttons-container" className="absolute"><button onClick={this._handleGetVideoSrc}>Get Webcam Feed</button></div>
-				<div id="video-and-motion-container" className="video-cover absolute">
+				<div id="video-and-motion-container" className="fill absolute">
 					<Video {...videoProps} />
+					<div id="overlay-container" className="fill absolute"></div>
 					{motionComponent}
 				</div>
 				{settingsComponent}

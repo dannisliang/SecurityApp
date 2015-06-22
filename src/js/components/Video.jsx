@@ -11,16 +11,15 @@ export default React.createClass({
 	componentDidMount: function() {
 		this._onResize();
 		window.addEventListener('resize', this._onResize);
+		MotionStore.addRAFListener(this._onRAF);
 	},
 	componentWillUnmount: function() {
 		window.removeEventListener('resize', this._onResize);
+		MotionStore.removeRAFListener(this._onRAF);
 	},
 	componentWillReceiveProps: function(nextProps) {
 		if(nextProps.src && !this.props.src) {
 			setTimeout(this._handlePlay, 0);  // delay here to allow src to be set on element before trying to play it
-		}
-		if(nextProps.raf && !this.props.raf) {
-			this.captureFrame();
 		}
 	},
 	// EVENTS ////////////////////////////////
@@ -31,6 +30,9 @@ export default React.createClass({
 			videoNode.clientHeight
 		]);
 	},
+	_onRAF: function() {
+		this.captureFrame();
+	},
 	// METHODS ///////////////////////////////
 	_handlePlay: function() {
 		let that = this,
@@ -40,7 +42,10 @@ export default React.createClass({
 		// poll to check when video is actually playing so we can update video width/height with real values
 		let videoReadyInterval = window.setInterval(function() {
 			if(videoNode.readyState === 4) {
-				that._onResize();
+				if(that.isMounted()) {
+					that._onResize();
+					MotionActions.play();
+				}
 				window.clearInterval(videoReadyInterval);
 			}
 		}, 100);
@@ -63,11 +68,7 @@ export default React.createClass({
 		};
 		return (
 			<div id="video-container" className="absolute fill">
-				<div className="table fill">
-					<div className="table-cell-valign">
-						<video ref="video" muted src={this.props.src}></video>
-					</div>
-				</div>
+				<video ref="video" className="video-cover" muted src={this.props.src}></video>
 			</div>
 		);
 	},

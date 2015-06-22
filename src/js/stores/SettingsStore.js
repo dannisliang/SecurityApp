@@ -10,9 +10,9 @@ let _data = OrderedMap({
 	height            : window.innerHeight,
 	debug             : false,
 	sensitivity       : 67.5,   // sensitivity used when comparing pixels (note: this is converted to 0-100% on FE to make the values more clear)
-	fps               : 8,     // frames per second
-	fpsInterval       : 125,    // 1000 / fps = fpsInterval (used to throttle RAF loop)
-	motionZoneDensity : 15     // it is too CPU intensive to compare every pixel in frame, so instead we use this (ex: 640 / 10)
+	fps               : 40,     // frames per second
+	fpsInterval       : 25,    // 1000 / fps = fpsInterval (used to throttle RAF loop)
+	motionZoneDensity : 30     // it is too CPU intensive to compare every pixel in frame, so instead we use this (ex: 640 / 10)
 });
 
 const SettingsStore = assign({}, BaseStore, {

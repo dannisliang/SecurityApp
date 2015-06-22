@@ -47,6 +47,9 @@ export default React.createClass({
 	handleChangePixelDensity: function(event) {
 		SettingsActions.setMotionZoneDensity(event.target.value);
 	},
+	handleChangeEffect: function(event) {
+
+	},
 	// RENDERING ////////////////////////
 	render: function() {
 		// this takes the actual sensitivity val and converts it to 0-100% to be more clear to user
@@ -61,15 +64,12 @@ export default React.createClass({
 					<input type="range" min="0" max="100" defaultValue={sensitivityPercent} onChange={this.handleChangeSensitivity} />
 					{sensitivityPercent} | {this.state.sensitivity}
 				</div><div>
-					<label>Sustained</label>
-					<input type="range" min="1" max="10" defaultValue="2" onChange={this.handleChangeSustained} />
-				</div><div>
 					<label>FPS</label>
-					<input type="range" min="1" max="30" defaultValue={this.state.fps} onChange={this.handleChangeFPS} />
+					<input type="range" min="1" max="60" defaultValue={this.state.fps} onChange={this.handleChangeFPS} />
 					{this.state.fps}
 				</div><div>
-					<label>Pixel Density</label>
-					<input type="range" min="4" max="15" defaultValue={this.state.motionZoneDensity} onChange={this.handleChangePixelDensity} />
+					<label>Motion Zone Size</label>
+					<input type="range" min="10" max="100" defaultValue={this.state.motionZoneDensity} onChange={this.handleChangePixelDensity} />
 					{this.state.motionZoneDensity}
 				</div>
 				{motionDetected}

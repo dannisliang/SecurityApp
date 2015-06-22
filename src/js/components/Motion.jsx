@@ -12,24 +12,25 @@ export default React.createClass({
 	getInitialState: function() {
 		return MotionStore.getAll();
 	},
+	// LIFECYCLE //////////////////////////
+	componentDidMount: function() {
+		MotionStore.addChangeListener(this._onChange);
+		MotionStore.addRAFListener(this._onRAF);
+		this.previousFrameCanvas = React.findDOMNode(this.refs.previousFrameCanvas);
+		this.currentFrameCanvas = React.findDOMNode(this.refs.currentFrameCanvas);
+	},
+	componentWillUnmount: function() {
+		MotionStore.removeChangeListener(this._onChange);
+		MotionStore.removeRAFListener(this._onRAF);
+	},
 	// EVENT HANDLERS ////////////////////////
 	_onChange: function() {
 		this.setState(MotionStore.getAll());
 	},
-	// LIFECYCLE //////////////////////////
-	componentDidMount: function() {
-		MotionStore.addChangeListener(this._onChange);
-		this.previousFrameCanvas = React.findDOMNode(this.refs.previousFrameCanvas);
-		this.currentFrameCanvas = React.findDOMNode(this.refs.currentFrameCanvas);
-	},
-	componentWillReceiveProps: function(nextProps) {
-		//console.log('props');
-		if(!this.props.raf && nextProps.raf && nextProps.previousFrame && nextProps.currentFrame) {
-			this.compareFrames(nextProps.previousFrame, nextProps.currentFrame);
+	_onRAF: function() {
+		if(this.props.previousFrame && this.props.currentFrame) {
+			this.compareFrames(this.props.previousFrame, this.props.currentFrame);
 		}
-	},
-	componentWillUnmount: function() {
-		MotionStore.removeChangeListener(this._onChange);
 	},
 	// METHODS //////////////////////////////
 	// TODO: move these to webworkers if possible

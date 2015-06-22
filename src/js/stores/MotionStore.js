@@ -17,15 +17,23 @@ const MotionStore = assign({}, BaseStore, {
 	getAll: function() {
 		return _data.toObject();
 	},
+	// event dispatchers
+	emitRAF: function() {
+		this.emit(Constants.RAF_EVENT);
+	},
+	// event listeners
+	addRAFListener: function(callback) {
+		this.on(Constants.RAF_EVENT, callback);
+	},
+	removeRAFListener: function(callback) {
+		this.removeListener(Constants.RAF_EVENT, callback);
+	},
 	// register store with dispatcher, allowing actions to flow through
 	dispatcherIndex: Dispatcher.register(function(payload) {
 		let action = payload.action;
 		switch(action.type) {
 			case Constants.ActionTypes.RAF:
-				if(action.raf !== _data.get('raf')) {
-					_data = _data.set('raf', action.raf);
-					MotionStore.emitChange();
-				}
+				MotionStore.emitRAF();
 				break;
 			case Constants.ActionTypes.MOTION_ZONES:
 				_data = _data.set('motionZones', action.array);
@@ -53,6 +61,10 @@ const MotionStore = assign({}, BaseStore, {
 					previousFrame: _data.get('currentFrame'),
 					currentFrame: action.canvas
 				});
+				MotionStore.emitChange();
+				break;
+			case Constants.ActionTypes.PLAY:
+				_data = _data.set('playing', true);
 				MotionStore.emitChange();
 				break;
 		}

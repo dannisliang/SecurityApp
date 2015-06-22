@@ -4,7 +4,7 @@
 @import "compass/css3/images";
 
 $primary-color: #FFF;
-$grid-line-color: rgba(255,255,255,0.1s);
+$grid-line-color: rgba(255,255,255,0.2);
 body {
 	color: $primary-color;
 	background: #000;
@@ -55,13 +55,13 @@ header {
 }
 #motion-zone-grid {
 	// background grid from http://jsfiddle.net/2kmUg/1/
-	@include background-image(repeating-linear-gradient(0deg, $grid-line-color, $grid-line-color 1px, transparent 1px, transparent 40px),repeating-linear-gradient(-90deg, $grid-line-color, $grid-line-color 1px, transparent 1px, transparent 40px));
+	@include background-image(repeating-linear-gradient(0deg, $grid-line-color, $grid-line-color 1px, transparent 1px, transparent 100px),repeating-linear-gradient(-90deg, $grid-line-color, $grid-line-color 1px, transparent 1px, transparent 100px));
 	background-color: transparent;
 	width: 100%;
 	position: relative;
 }
 #settings-container {
-	right: 0;
+	left: 0;
 	bottom: 0;
 }
 #buttons-container {
@@ -70,11 +70,17 @@ header {
 }
 video {
 	width: 100%;
-	//max-height: 100%;
 }
 .motion-zone {
 	background: #FFF;
 }
-#motion-zones-canvas {
-	opacity: 0.5;
+#motion-container {
+	overflow: hidden;
+}
+#overlay-container {
+	@include background(radial-gradient(center, ellipse cover, rgba(0,242,255,0) 0%,rgba(48,210,255,0.34) 34%,rgba(24,83,165,0.67) 67%,rgba(0,36,43,1) 100%));
+	z-index: 1;
+	&.motion {
+		@include background(radial-gradient(center, ellipse cover, rgba(255,225,0,0) 0%,rgba(255,241,48,0.34) 34%,rgba(107,21,0,0.73) 73%,rgba(0,36,43,1) 100%));
+	}
 }

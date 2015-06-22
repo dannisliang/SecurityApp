@@ -19,10 +19,14 @@ export default {
 			};
 		Core.getWebcamSrc(onSuccess, onError);
 	},
-	onRAF: function(bool) {
+	play: function() {
 		Dispatcher.handleViewAction({
-			type: Constants.ActionTypes.RAF,
-			raf: bool
+			type: Constants.ActionTypes.PLAY
+		});
+	},
+	onRAF: function() {
+		Dispatcher.handleViewAction({
+			type: Constants.ActionTypes.RAF
 		});
 	},
 	captureFrame: function(canvas) {
