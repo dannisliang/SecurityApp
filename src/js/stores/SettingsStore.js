@@ -9,10 +9,11 @@ let _data = OrderedMap({
 	width             : window.innerWidth,
 	height            : window.innerHeight,
 	debug             : false,
-	sensitivity       : 67.5,   // sensitivity used when comparing pixels (note: this is converted to 0-100% on FE to make the values more clear)
-	fps               : 40,     // frames per second
-	fpsInterval       : 25,    // 1000 / fps = fpsInterval (used to throttle RAF loop)
-	motionZoneDensity : 30     // it is too CPU intensive to compare every pixel in frame, so instead we use this (ex: 640 / 10)
+	sensitivity       : 75,   // sensitivity used when comparing pixels (note: this is converted to 0-100% on FE to make the values more clear)
+	fps               : 18,     // frames per second
+	fpsInterval       : 55.555,    // 1000 / fps = fpsInterval (used to throttle RAF loop)
+	motionZoneDensity : 35,    // it is too CPU intensive to compare every pixel in frame, so instead we use this (ex: 640 / 10)
+	activeZonesNeeded : 20
 });
 
 const SettingsStore = assign({}, BaseStore, {
@@ -37,6 +38,10 @@ const SettingsStore = assign({}, BaseStore, {
 				break;
 			case Constants.ActionTypes.MOTION_ZONE_DENSITY:
 				_data = _data.set('motionZoneDensity', action.number);
+				SettingsStore.emitChange();
+				break;
+			case Constants.ActionTypes.ACTIVE_ZONES_NEEDED:
+				_data = _data.set('activeZonesNeeded', action.number);
 				SettingsStore.emitChange();
 				break;
 			case Constants.ActionTypes.TOGGLE_DEBUG:

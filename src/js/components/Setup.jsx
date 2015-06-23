@@ -29,6 +29,10 @@ export default React.createClass({
 			this._handleStartRAF();  // now that video src is set and playing we should start the RAF loop so motion detection can use it
 		}
 	},
+	componentWillReceiveProps: function(nextProps) {
+		console.log('\n\n\n=====');
+		console.log(nextProps.mode);
+	},
 	// EVENT HANDLERS ////////////////////////
 	_onChange: function() {
 		// if setState is called in the same tick, react is smart enough to merge them
@@ -37,10 +41,6 @@ export default React.createClass({
 	},
 	_onResize: function() {
 		WindowActions.resize();
-	},
-	// USER INPUT EVENTS ////////////////////
-	_handleGetVideoSrc: function() {
-		MotionActions.addVideoSrc();
 	},
 	// METHODS //////////////////////////////
 	_handleStartRAF: function() {
@@ -72,7 +72,8 @@ export default React.createClass({
 			sensitivity   : this.state.sensitivity,
 			currentFrame  : this.state.currentFrame,
 			previousFrame : this.state.previousFrame,
-			motionZoneDensity  : this.state.motionZoneDensity
+			motionZoneDensity  : this.state.motionZoneDensity,
+			activeZonesNeeded  : this.state.activeZonesNeeded
 		};
 		let videoProps = {
 			videoWidth   : this.state.videoWidth,
@@ -82,12 +83,11 @@ export default React.createClass({
 		};
 		let motionComponent   = this.state.src ? <Motion {...motionProps} /> : null;
 		let settingsComponent = this.state.src ? <MotionSettings motionDetected={this.state.motionDetected} /> : null;
+		let setupContainerClassName = 'fill absolute' + (this.props.mode ? ' navigation-expanded' : '');
 		return (
-			<div id="arm-container" className="fill">
-				<div id="buttons-container" className="absolute"><button onClick={this._handleGetVideoSrc}>Get Webcam Feed</button></div>
+			<div id="setup-container" className={setupContainerClassName}>
 				<div id="video-and-motion-container" className="fill absolute">
 					<Video {...videoProps} />
-					<div id="overlay-container" className="fill absolute"></div>
 					{motionComponent}
 				</div>
 				{settingsComponent}

@@ -14,7 +14,7 @@ module.exports = {
 		settings: {
 			root     : local,
 			host     : 'local.securityapp.com',
-			port     : 8080,
+			port     : 80,
 			fallback : 'src/index.html',      // needed for html5 pushstate
 			livereload: {
 				port: 35929

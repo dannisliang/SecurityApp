@@ -31,5 +31,11 @@ export default {
 			type: Constants.ActionTypes.MOTION_ZONE_DENSITY,
 			number: number
 		});
+	},
+	setActiveZonesNeeded: function(number) {
+		Dispatcher.handleViewAction({
+			type: Constants.ActionTypes.ACTIVE_ZONES_NEEDED,
+			number: number
+		});
 	}
 };

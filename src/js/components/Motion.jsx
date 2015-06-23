@@ -3,6 +3,7 @@ import Addons from 'react/addons';
 import Constants from '../Constants';
 import MotionStore from '../stores/MotionStore';
 import MotionActions from '../actions/MotionActions';
+import MotionOverlay from './MotionOverlay.jsx';
 import MotionZonesGrid from './MotionZonesGrid.jsx';
 var PureRenderMixin = Addons.addons.PureRenderMixin;
 
@@ -64,6 +65,14 @@ export default React.createClass({
 		}
 		if(motionZones.length) {
 			MotionActions.setMotionZones(motionZones);
+			if(motionZones.length >= this.props.activeZonesNeeded) {
+				MotionActions.setMotionDetected(true);
+			} else {
+				MotionActions.setMotionDetected(false);
+			}
+		} else {
+			MotionActions.setMotionZones([]);
+			MotionActions.setMotionDetected(false);
 		}
 	},
 	comparePixels: function(pixel1, pixel2) {
@@ -89,6 +98,7 @@ export default React.createClass({
 			<div id="motion-container" className="fill absolute">
 				<canvas ref="previousFrameCanvas" className="absolute"></canvas>
 				<canvas ref="currentFrameCanvas" className="absolute"></canvas>
+				<MotionOverlay motionDetected={this.state.motionDetected} />
 				<MotionZonesGrid {...motionZoneDensityProps} />
 			</div>
 		);

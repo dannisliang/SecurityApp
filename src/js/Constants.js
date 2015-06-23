@@ -19,6 +19,7 @@ export default {
     SET_FPS: null,
     MOTION_ZONE_DENSITY: null,
     MOTION_DETECTED: null,
+    ACTIVE_ZONES_NEEDED: null,
     RESIZE: null,
     VIDEO_RESIZE: null,
     MOTION_ZONES: null

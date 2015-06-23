@@ -7,21 +7,23 @@ This component handles rendering main content pages to the screen via react-rout
 // IMPORTS ///////////////////////////////
 import React from 'react';
 import {RouterMixin} from 'react-mini-router';
-import App from './App.jsx';
-import Home from './Home.jsx';
-import Arm from './Arm.jsx';
-import Images from './Images.jsx';
+import Setup from './Setup.jsx';
+import MotionActions from '../actions/MotionActions';
 
 // CLASS /////////////////////////////////
 export default React.createClass({
 	mixins: [RouterMixin],
 	routes: {
-		'/'       : 'home',
-		'/arm'    : 'arm',
-		'/images' : 'images'
+		'/'         : 'setup',
+		'/:mode'    : 'setup'
 	},
-	render : function() { return this.renderCurrentRoute(); },
-	home   : function() { return <Home /> },
-	arm    : function() { return <Arm /> },
-	images : function() { return <Images /> }
+	render: function() {
+		return this.renderCurrentRoute();
+	},
+	setup: function(mode) {
+		if(typeof mode === 'object') { mode = false; }   // when no mode is passed it defaults to object in react-mini-router for some reason
+		return (
+			<Setup mode={mode} />
+		);
+	}
 });

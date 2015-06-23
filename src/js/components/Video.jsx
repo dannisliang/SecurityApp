@@ -3,6 +3,7 @@ import Addons from 'react/addons';
 import Constants from '../Constants';
 import MotionStore from '../stores/MotionStore';
 import MotionActions from '../actions/MotionActions';
+import GrantWebcamAccess from './GrantWebcamAccess.jsx';
 var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
@@ -31,7 +32,7 @@ export default React.createClass({
 		]);
 	},
 	_onRAF: function() {
-		this.captureFrame();
+		this._captureFrame();
 	},
 	// METHODS ///////////////////////////////
 	_handlePlay: function() {
@@ -50,7 +51,7 @@ export default React.createClass({
 			}
 		}, 100);
 	},
-	captureFrame: function() {
+	_captureFrame: function() {
 		var canvas        = document.createElement('canvas'),
 			video         = React.findDOMNode(this.refs.video),
 			captureWidth  = this.props.videoWidth / this.props.motionZoneDensity,
@@ -60,14 +61,20 @@ export default React.createClass({
 		canvas.getContext('2d').drawImage(video, 0, 0, captureWidth, captureHeight);
 		MotionActions.captureFrame(canvas); // now that we have the frame, we need to send it to an action so other components like motion can see it
 	},
+	// USER INPUT EVENTS ////////////////////
+	_handleGetVideoSrc: function() {
+		MotionActions.addVideoSrc();
+	},
 	// RENDERING ////////////////////////
 	render: function() {
 		let canvasStyle = {
 			position: 'absolute',
 			bottom: 0
 		};
+		let grantWebcamAccess = this.props.src ? null : <GrantWebcamAccess />;
 		return (
 			<div id="video-container" className="absolute fill">
+				{grantWebcamAccess}
 				<video ref="video" className="video-cover" muted src={this.props.src}></video>
 			</div>
 		);
