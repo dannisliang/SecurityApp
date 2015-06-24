@@ -3,6 +3,7 @@ import Addons from 'react/addons';
 import SettingsActions from '../actions/SettingsActions';
 import SettingsStore from '../stores/SettingsStore';
 import Dispatcher from '../Dispatcher';
+import {navigate} from 'react-mini-router';
 var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
@@ -50,13 +51,18 @@ export default React.createClass({
 	_handleChangeActiveZonesNeeded: function(event) {
 		SettingsActions.setActiveZonesNeeded(event.target.value);
 	},
+	_handleClose: function(event) {
+		event.preventDefault();
+		setTimeout(function() { navigate('/'); }, 0);
+	},
 	// RENDERING ////////////////////////
 	render: function() {
 		// this takes the actual sensitivity val and converts it to 0-100% to be more clear to user
 		let sensitivityPercent = Math.round(100 - (((this.state.sensitivity - this.props.minSensitivity) * 100) / (this.props.maxSensitivity - this.props.minSensitivity)));
 		let motionDetected = this.props.motionDetected ? 'Motion detected' : 'All clear';
 		return (
-			<div id="settings-container" className="absolute">
+			<div id="settings-container" className="fl">
+				<a onClick={this._handleClose} href="#" title="Close">X</a>
 				<div>
 					<button onClick={this._handleToggleDebug}>Toggle Debug</button>
 				</div><div>

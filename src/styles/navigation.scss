@@ -1,11 +1,18 @@
 @import "./_common";
 @import "compass/css3/box-sizing";
+@import "compass/css3/transform";
+@import "compass/css3/transition";
 
 header {
+	@include transition(transform 0.35s $ease-out-quad);
+	@include translate3d(0, 0, 0);
+	position: absolute;
+	z-index: 1;
 	width: $nav-width;
 	height: 100%;
 	background: $light-gray;
-	float: left;
+	//float: left;
+	border-right: 1px solid #000;
 	a {
 		@include box-sizing(border-box);
 		position: relative;
@@ -34,12 +41,27 @@ header {
 
 		}
 		&:active {
-			background: $red;
-			color: $white;
+			//background: $red;
+			//color: $white;
 		}
 		&.selected {
 			background: $dark-gray;
 			border: 0;
+			span:after {
+				content: '';
+				display: block;
+				position: absolute;
+				top: 0;
+				right: -1px;
+				width: 1px;
+				height: 100%;
+				background: $dark-gray;
+			}
 		}
+	}
+}
+.section-arm {
+	header {
+		@include translate3d(-($nav-width + 1px), 0, 0);
 	}
 }
