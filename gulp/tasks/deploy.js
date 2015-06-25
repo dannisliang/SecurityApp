@@ -11,7 +11,7 @@ var config       = require('../config');
 var errorHandler = config.errorHandler;
 
 gulp.task('deploy', function() {
-	return runSequence('build', 'copyDeploy', 'usemin', 'rsync', function(){
+	return runSequence('clean', 'build', 'copyDeploy', 'usemin', 'rev', 'rsync', function(){
 		// TODO: this process handgs after rsync for some reason without completion, not major, just annoying
 	});
 });

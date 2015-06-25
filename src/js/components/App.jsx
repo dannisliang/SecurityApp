@@ -36,7 +36,6 @@ export default React.createClass({
 				this.currentContentComponent = <Arm />;
 				break;
 			default:
-				this.currentContentComponent;
 				break;
 		}
 		return (

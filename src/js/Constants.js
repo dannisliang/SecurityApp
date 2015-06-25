@@ -22,7 +22,11 @@ export default {
     ACTIVE_ZONES_NEEDED: null,
     RESIZE: null,
     VIDEO_RESIZE: null,
-    MOTION_ZONES: null
+    MOTION_ZONES: null,
+    ARM_START_COUNTDOWN: null,
+    ARM_END_COUNTDOWN: null,
+    ARM_COUNTDOWN_TICK: null,
+    ARM_RESET_COUNTDOWN: null
   }),
   // TODO: this will come in handy when be apis come into play
   ActionSources: keyMirror({

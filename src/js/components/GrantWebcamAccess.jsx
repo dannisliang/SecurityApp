@@ -14,6 +14,7 @@ export default React.createClass({
 		return (
 			<div className="table fill absolute">
 				<div className="table-cell-valign">
+					<i className="icon icon-ninja-star"></i>
 					<button onClick={this._handleGetVideoSrc} className="red">GRANT WEBCAM ACCESS</button>
 				</div>
 			</div>

@@ -12,6 +12,16 @@ body {
 	background: #000;
 	overflow-x: hidden;
 }
+.icon {
+	display: inline-block;
+	height: 0;
+	speak: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+}
+.icon-ninja-star {
+	font-size: 64px;
+}
 .fl {
 	float: left;
 }

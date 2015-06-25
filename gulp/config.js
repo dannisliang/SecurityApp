@@ -31,6 +31,20 @@ module.exports = {
 			imagePath      : '/images'
 		}
 	},
+	iconfont: {
+		src: src + '/svgs/*.svg',
+		dest: local + '/webfonts',
+		cssOptions: {
+			fontName: 'mn-icon-font',
+			targetPath: '../styles/icons.css',
+			fontPath: '../webfonts/'
+		},
+		fontOptions: {
+			fontName: 'mn-icon-font',
+			appendUnicode: true,
+			normalize: true
+		}
+	},
 	browserify: {
 		settings: {
 			transform: ['babelify', 'reactify']
@@ -51,10 +65,12 @@ module.exports = {
 		],
 		dest: local
 	},
-	copyDeploy: {
-		src: [
-			src + '/.htaccess'
-		],
+	copyDeploy: [
+		{src: src + '/.htaccess', dest: deploy},
+		{src: local + '/webfonts/**', dest: deploy + '/webfonts'}
+	],
+	rev: {
+		src: deploy + '/**/*.{html,css,js,woff,woff2,eot,ttf}',
 		dest: deploy
 	},
 	deploy: {
@@ -73,7 +89,7 @@ module.exports = {
 			progress    : false  // handy for debugging what is being deployed
 		}
 	},
-	clean: deploy,
+	clean: [deploy],
 	errorHandler: function(error) {
 		console.log(error.toString());
 		this.emit('end');
