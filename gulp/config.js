@@ -90,6 +90,7 @@ module.exports = {
 		}
 	},
 	clean: [deploy],
+	cleanLocal: [local],
 	errorHandler: function(error) {
 		console.log(error.toString());
 		this.emit('end');

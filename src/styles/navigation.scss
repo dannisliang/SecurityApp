@@ -60,7 +60,7 @@ header {
 		}
 	}
 }
-.section-arm {
+.section-arm, .section-armed {
 	header {
 		@include translate3d(-($nav-width + 1px), 0, 0);
 	}

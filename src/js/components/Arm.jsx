@@ -2,6 +2,7 @@ import React from 'react';
 import Addons from 'react/addons';
 import ArmStore from '../stores/ArmStore';
 import ArmActions from '../actions/ArmActions';
+import ArmCountdown from './ArmCountdown.jsx';
 import {navigate} from 'react-mini-router';
 var PureRenderMixin = Addons.addons.PureRenderMixin;
 
@@ -26,17 +27,6 @@ export default React.createClass({
 		} else if(this.state.countdownComplete && !prevState.countdownComplete) {
 			this._handleEndCountdown();
 		}
-	},
-	componentWillReceiveProps: function(nextProps) {
-		console.log('----');
-		console.log(nextProps)
-		if(nextProps.path === 'arm') {
-			//this.
-		}
-	},
-	componentWillUpdate: function(nextProps) {
-		console.log('---->>');
-		console.log(nextProps);
 	},
 	// EVENT HANDLERS ////////////////////////
 	_onChange: function() {
@@ -66,23 +56,18 @@ export default React.createClass({
 		this._handleClearCountdownInterval();
 		ArmActions.resetCountdown();
 	},
-	// USER INPUT EVENTS ////////////////
-	_handleCancelClick: function() {
-		event.preventDefault();
-		setTimeout(function() { navigate('/'); }, 0);
-	},
 	// RENDERING ////////////////////////
+	// TODO: fullscreen option
 	render: function() {
+		let armContentComponent;
+		if(this.state.countdownComplete) {
+			armContentComponent = <div>Armed</div>;
+		} else {
+			armContentComponent = <ArmCountdown countdownSeconds={this.state.countdownSeconds} />;
+		}
 		return (
-			<div id="arm-container" className="fill table">
-				<div className="table-cell-valign">
-					<i id="arm-icon-ninja-star" className="icon icon-ninja-star"></i>
-					<div id="arm-info-container">
-						<h1>Arming in {this.state.countdownSeconds} seconds</h1>
-						The system will NOT arm if motion is detected when the countdown ends.<br/>Please leave the area.
-					</div>
-					<button onClick={this._handleCancelClick} className="red">CANCEL</button>
-				</div>
+			<div id="arm-container" className="fill table absolute">
+				{armContentComponent}
 			</div>
 		);
 	},

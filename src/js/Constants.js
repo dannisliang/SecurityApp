@@ -10,6 +10,7 @@ export default {
   },
   // action types - used by stores to know when to set data
   ActionTypes: keyMirror({
+    APP_DEBUG: null,
     ADD_VIDEO_SRC: null,
     PLAY: null,
     ADD_VIDEO_SRC_ERROR: null,

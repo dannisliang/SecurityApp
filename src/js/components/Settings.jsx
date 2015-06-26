@@ -61,7 +61,7 @@ export default React.createClass({
 		let sensitivityPercent = Math.round(100 - (((this.state.sensitivity - this.props.minSensitivity) * 100) / (this.props.maxSensitivity - this.props.minSensitivity)));
 		let motionDetected = this.props.motionDetected ? 'Motion detected' : 'All clear';
 		return (
-			<div id="settings-container" className="fl">
+			<div id="settings-container" className="absolute">
 				<a onClick={this._handleClose} href="#" title="Close">X</a>
 				<div>
 					<button onClick={this._handleToggleDebug}>Toggle Debug</button>

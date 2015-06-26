@@ -31,6 +31,7 @@ $ease-in-out-back  : cubic-bezier(0.680, -0.550, 0.265, 1.550);
 
 $white           : #FFF;
 $red             : #D6144B;
+$green           : #a7ee0d;
 $dark-gray       : #27292F;
 $light-gray      : #32343B;
 $grid-line-color : rgba(255,255,255,0.2);
@@ -41,3 +42,8 @@ $border-gray     : #4a4a4a;
 
 $nav-width : 58px;
 $nav-width-expanded: 300px;
+
+// SPEED /////////////////////////////////
+
+$content-transition-speed: 0.3s;
+$content-transition-speed-stagger: 0.35s;
