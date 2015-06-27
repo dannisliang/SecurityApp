@@ -9,6 +9,25 @@ export default React.createClass({
 	_handleGetVideoSrc: function() {
 		MotionActions.addVideoSrc();
 	},
+	_handleAuthorizeDropbox: function() {
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState === XMLHttpRequest.DONE ) {
+				if(xmlhttp.status === 200){
+					console.log(xmlhttp.response);
+				}
+				else if(xmlhttp.status === 400) {
+					alert('There was an error 400')
+				}
+				else {
+					alert('something else other than 200 was returned')
+				}
+			}
+		}
+		xmlhttp.open("GET", "php/getDBAuthUrl.php", true);
+		xmlhttp.send();
+		///DropboxActions.getAuthorizeUrl();
+	},
 	// RENDERING ////////////////////////
 	render: function() {
 		return (
@@ -16,6 +35,7 @@ export default React.createClass({
 				<div className="table-cell-valign">
 					<i className="icon icon-ninja-star"></i>
 					<button onClick={this._handleGetVideoSrc} className="red">GRANT WEBCAM ACCESS</button>
+					<button onClick={this._handleAuthorizeDropbox}>Dropbox</button>
 				</div>
 			</div>
 		);

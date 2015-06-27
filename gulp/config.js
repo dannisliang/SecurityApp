@@ -12,10 +12,9 @@ var src    = './src',       // raw files to edit
 module.exports = {
 	server: {
 		settings: {
-			root     : local,
-			host     : 'localhost',
+			base     : local,
+			hostname : 'local.securityapp.com',
 			port     : 80,
-			fallback : 'src/index.html',      // needed for html5 pushstate
 			livereload: {
 				port: 35929
 			}
@@ -59,10 +58,9 @@ module.exports = {
 		tasks : ['build']
 	},
 	copyLocal: [
-		{src: src + '/.htaccess', dest: local},
-		{src: src + '/index.*', dest: local},
+		{src: [src + '/.htaccess', src + '/index.html', src + '/app-info.json'], dest: local},
 		{src: src + '/dropbox-sdk/**/*.*', dest: local + '/dropbox-sdk'},
-		{src: src + '/images/**.*', dest: local + '/images'}
+		{src: src + '/php/**/*.*', dest: local + '/php'}
 	],
 	copyDeploy: [
 		{src: src + '/.htaccess', dest: deploy},
