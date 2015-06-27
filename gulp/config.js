@@ -58,9 +58,7 @@ module.exports = {
 		tasks : ['build']
 	},
 	copyLocal: [
-		{src: [src + '/.htaccess', src + '/index.html', src + '/app-info.json'], dest: local},
-		{src: src + '/dropbox-sdk/**/*.*', dest: local + '/dropbox-sdk'},
-		{src: src + '/php/**/*.*', dest: local + '/php'}
+		{src: [src + '/.htaccess', src + '/*.html'], dest: local}
 	],
 	copyDeploy: [
 		{src: src + '/.htaccess', dest: deploy},

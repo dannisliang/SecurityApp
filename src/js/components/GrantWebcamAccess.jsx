@@ -14,7 +14,7 @@ export default React.createClass({
 	// LIFECYCLE ////////////////////////////
 	componentDidMount: function() {
 		DropboxStore.addChangeListener(this._onChange);
-		DropboxActions.getAuthUrl();
+		//DropboxActions.getAuthUrl();
 	},
 	componentWillUnmount: function() {
 		DropboxStore.removeChangeListener(this._onChange);
@@ -26,8 +26,27 @@ export default React.createClass({
 	_handleGrantWebcamAccessClick: function() {
 		MotionActions.addVideoSrc();
 	},
-	_handleDropboxAuthorizeClick: function() {
-		DropboxActions.authInProgress();
+	_handleDropboxAuthorizeClick: function(e) {
+		e.preventDefault();
+		var client = new Dropbox.Client({key: "xqb4jksizxtzf1k"});
+		client.authDriver(new Dropbox.AuthDriver.Popup({
+			rememberUser: false,
+			receiverUrl: 'http://localhost/dropbox-oauth.html'
+		}));
+		client.authenticate(function(error, client) {
+		  if (error) {
+		    console.log(error);
+		    return;
+		  }
+		  console.log(client);
+		  client.writeFile("hello_world.txt", "Hello, world!\n", function(error, stat) {
+  if (error) {
+    return showError(error);  // Something went wrong.
+  }
+
+  alert("File saved as revision " + stat.versionTag);
+});
+		});
 	},
 	_handleDropboxAuthCodeSubmit: function(event) {
 		event.preventDefault();
@@ -39,43 +58,14 @@ export default React.createClass({
 		}
 		DropboxActions.sendAuthCode(authCode);
 	},
-	//_handleAuthorizeDropbox: function() {
-		/*var xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function() {
-			if (xmlhttp.readyState === XMLHttpRequest.DONE ) {
-				if(xmlhttp.status === 200){
-					console.log(xmlhttp.response);
-				}
-				else if(xmlhttp.status === 400) {
-					alert('There was an error 400')
-				}
-				else {
-					alert('something else other than 200 was returned')
-				}
-			}
-		}
-		xmlhttp.open("GET", "php/getDBAuthUrl.php", true);
-		xmlhttp.send();*/
-		//DropboxActions.getAuthorizeUrl();
-	//},
 	// RENDERING ////////////////////////
 	render: function() {
-		//let dropboxCodeFormComponent = null;
-		//if(this.state.dropboxAuthInProgress) {
-		let dropboxCodeFormComponent = (
-			<form onSubmit={this._handleDropboxAuthCodeSubmit}>
-				<input ref="dbAuthCode" placeholder="DB Code" />
-				<input type="submit" value="Submit" />
-			</form>
-		);
-		//}
 		return (
 			<div className="table fill absolute">
 				<div className="table-cell-valign">
 					<i className="icon icon-ninja-star"></i>
 					<button onClick={this._handleGrantWebcamAccessClick} className="red">GRANT WEBCAM ACCESS</button>
 					<a onClick={this._handleDropboxAuthorizeClick} href={this.state.dropboxAuthorizeUrl} target="_blank">Dropbox</a>
-					{dropboxCodeFormComponent}
 				</div>
 			</div>
 		);
