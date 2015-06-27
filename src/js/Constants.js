@@ -31,7 +31,10 @@ export default {
     ARMED: null,
     DISARMED: null,
     DEBUG_TOGGLE_EFFECTS: null,
-    CAPTURE_BREACH: null
+    CAPTURE_BREACH: null,
+    DB_GET_AUTH_URL: null,
+    DB_AUTH_IN_PROGRESS: null,
+    DB_SEND_AUTH_CODE: null
   }),
   // TODO: this will come in handy when be apis come into play
   ActionSources: keyMirror({
