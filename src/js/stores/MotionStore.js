@@ -7,10 +7,15 @@ import assign from 'object-assign';
 
 // data storage - the values here are also the default settings
 let _data = OrderedMap({
+	effects: true,
+	armed: false,
 	motionDetected: false,
 	motionZones: [],
 	motionZone: {top: 0, left: 0, width: 0, height: 0}   // used in debug mode to show what part of the frame we're detecting motion in
 });
+// delay for motion detected so if motion is sensed it will stay on for the duration of the delay
+let _motionDetectionDelay = 800;
+let _motionDetectionDelayTimeout = null;
 
 const MotionStore = assign({}, BaseStore, {
 	// public methods used by Controller-View to operate on data
@@ -40,8 +45,14 @@ const MotionStore = assign({}, BaseStore, {
 				MotionStore.emitChange();
 				break;
 			case Constants.ActionTypes.MOTION_DETECTED:
-				if(action.boolean !== _data.get('motionDetected')) {
+				if(!_motionDetectionDelayTimeout) {
 					_data = _data.set('motionDetected', action.boolean);
+					if(action.boolean) {
+						// if motion is detected apply a delay before this store can send out the 'all clear'
+						_motionDetectionDelayTimeout = setTimeout(function() {
+							_motionDetectionDelayTimeout = null;
+						}, _motionDetectionDelay);
+					}
 					MotionStore.emitChange();
 				}
 				break;
@@ -65,6 +76,24 @@ const MotionStore = assign({}, BaseStore, {
 				break;
 			case Constants.ActionTypes.PLAY:
 				_data = _data.set('playing', true);
+				MotionStore.emitChange();
+				break;
+			case Constants.ActionTypes.ARMED:
+				_data = _data.merge({
+					armed: true,
+					effects: false
+				});
+				MotionStore.emitChange();
+				break;
+			case Constants.ActionTypes.DISARMED:
+				_data = _data.merge({
+					armed: false,
+					effects: true
+				});
+				MotionStore.emitChange();
+				break;
+			case Constants.ActionTypes.DEBUG_TOGGLE_EFFECTS:
+				_data = _data.set('effects', !_data.get('effects'));
 				MotionStore.emitChange();
 				break;
 		}

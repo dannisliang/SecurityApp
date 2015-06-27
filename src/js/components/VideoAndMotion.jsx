@@ -15,13 +15,13 @@ export default React.createClass({
 	},
 	// LIFECYCLE ////////////////////////////
 	componentDidMount: function() {
-		MotionStore.addChangeListener(this._onChange);
-		SettingsStore.addChangeListener(this._onChange);
+		MotionStore.addChangeListener(this._onMotionChange);
+		SettingsStore.addChangeListener(this._onSettingsChange);
 		window.addEventListener('resize', this._onResize);
 	},
 	componentWillUnmount: function() {
-		MotionStore.removeChangeListener(this._onChange);
-		SettingsStore.removeChangeListener(this._onChange);
+		MotionStore.removeChangeListener(this._onMotionChange);
+		SettingsStore.removeChangeListener(this._onSettingsChange);
 		window.removeEventListener('resize', this._onResize);
 	},
 	componentDidUpdate: function(prevProps, prevState) {
@@ -30,9 +30,10 @@ export default React.createClass({
 		}
 	},
 	// EVENT HANDLERS ////////////////////////
-	_onChange: function() {
-		// if setState is called in the same tick, react is smart enough to merge them
+	_onMotionChange: function() {
 		this.setState(MotionStore.getAll());
+	},
+	_onSettingsChange: function() {
 		this.setState(SettingsStore.getAll());
 	},
 	_onResize: function() {
@@ -62,25 +63,19 @@ export default React.createClass({
 	// RENDERING ////////////////////////////
 	render: function() {
 		let motionProps = {
-			videoWidth    : this.state.videoWidth,
-			videoHeight   : this.state.videoHeight,
-			debug         : this.state.debug,
-			sensitivity   : this.state.sensitivity,
-			currentFrame  : this.state.currentFrame,
-			previousFrame : this.state.previousFrame,
-			motionZoneDensity  : this.state.motionZoneDensity,
-			activeZonesNeeded  : this.state.activeZonesNeeded
+			videoWidth        : this.state.videoWidth,
+			videoHeight       : this.state.videoHeight,
+			debug             : this.state.debug,
+			sensitivity       : this.state.sensitivity,
+			currentFrame      : this.state.currentFrame,
+			previousFrame     : this.state.previousFrame,
+			motionZoneDensity : this.state.motionZoneDensity,
+			activeZonesNeeded : this.state.activeZonesNeeded
 		};
-		let videoProps = {
-			videoWidth   : this.state.videoWidth,
-			videoHeight  : this.state.videoHeight,
-			src          : this.state.src,
-			motionZoneDensity : this.state.motionZoneDensity
-		};
-		let motionComponent   = this.state.src ? <Motion {...motionProps} /> : null;
+		let motionComponent = this.state.src ? <Motion {...motionProps} /> : null;
 		return (
 			<div id="video-and-motion-container" className="fill absolute">
-				<Video {...videoProps} />
+				<Video />
 				{motionComponent}
 			</div>
 		);

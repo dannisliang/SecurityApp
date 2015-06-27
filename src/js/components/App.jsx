@@ -4,7 +4,7 @@ App
 This component handles the main skeleton app structure (header, content, footer) as well as pushstate routing
 */
 import React, {PropTypes} from 'react';
-import {RouterMixin} from 'react-mini-router';
+import {RouterMixin, navigate} from 'react-mini-router';
 import Addons from 'react/addons';
 import Debug from './Debug.jsx';
 import Navigation from './Navigation.jsx';
@@ -18,11 +18,11 @@ var ReactCSSTransitionGroup = Addons.addons.CSSTransitionGroup;
 
 export default React.createClass({
 	mixins: [PureRenderMixin, RouterMixin],
-	// INITIAL STATE ////////////////////////
+// INITIAL STATE ////////////////////////
 	getInitialState: function() {
 		return AppStore.getAll();
 	},
-	// LIFECYCLE //////////////////////////
+// LIFECYCLE //////////////////////////
 	componentDidMount: function() {
 		AppStore.addChangeListener(this._onChange);
 		document.addEventListener('keyup', this._handleKeyUp);  // used for triggering debug mode via "D" key
@@ -31,7 +31,7 @@ export default React.createClass({
 		AppStore.removeChangeListener(this._onChange);
 		document.removeEventListener('keyup');
 	},
-	// EVENT HANDLERS ////////////////////////
+// EVENT HANDLERS ////////////////////////
 	_onChange: function() {
 		this.setState(AppStore.getAll());
 	},
@@ -39,14 +39,18 @@ export default React.createClass({
 		if(event.keyCode !== 68) { return; }   // used for triggering debug mode via "D" key
 		AppActions.debug(!this.state.debug);
 	},
-	// ROUTES /////////////////////////////
+// ROUTES /////////////////////////////
 	routes: {
-		'/'            : '_content',
-		'/:path'        : '_content'
+		'/'      : '_content',
+		'/:path' : '_content'
 	},
-	// RENDERING //////////////////////////
+// RENDERING //////////////////////////
+	/*
+		Handles overall rendering of all content. renderCurrentRoute is a method in react-mini-router
+		that renders components from the _content method.
+	*/
 	render: function() {
-		let debugComponent = this.state.debug ? <Debug /> : null;
+		let debugComponent = this.state.debug ? <Debug /> : null;   // hidden debug component (accessible by pressing "D" key)
 		return (
 			<div className="fill">
 				{debugComponent}
@@ -54,6 +58,9 @@ export default React.createClass({
 			</div>
 		)
 	},
+	/*
+		Returns content components based on the current path
+	*/
 	_getContent: function(path) {
 		let content = null;
 		switch(path) {
@@ -66,8 +73,30 @@ export default React.createClass({
 		}
 		return content;
 	},
+	/*
+		Handles checking prerequsites for certain paths. For example,
+		arm, settings, etc paths require webcam video feed to be working.
+	*/
+	_checkPrerequsites: function(path) {
+		let allowed = true;
+		switch(path) {
+			case 'settings':
+			case 'arm':
+				allowed = this.state.webcam;
+				break;
+		}
+		return allowed;
+	},
+	/*
+		Handles core rendering of all content. Note that I'm not using react-mini-router how it's
+		normally used with a rendering method for each route because I want to be able to use
+		react's css transition group to transition between path content
+	*/
 	_content: function(path) {
-		if(typeof path === 'object') { path = false; }   // when no mode is passed it defaults to object in react-mini-router for some reason, so just convert it to false instead
+		if(typeof path === 'object') { path = false; }      // when no mode is passed it defaults to object in react-mini-router for some reason, so just convert it to false instead
+		if(!this._checkPrerequsites(path)) {                // check if the current route is allowed (for example, arm and settings sections require webcam video to be working)
+			setTimeout(function(){ navigate('/'); }, 0);    // redirect back to home if route is invalid
+		}
 		return (
 			<div className={'fill'+(path ? ' section-'+path : '')}>
 				<Navigation path={path} />

@@ -13,7 +13,7 @@ module.exports = {
 	server: {
 		settings: {
 			root     : local,
-			host     : 'local.securityapp.com',
+			host     : 'localhost',
 			port     : 80,
 			fallback : 'src/index.html',      // needed for html5 pushstate
 			livereload: {
@@ -58,13 +58,12 @@ module.exports = {
 		src   : 'src/**/*.*',
 		tasks : ['build']
 	},
-	copyLocal: {
-		src: [
-			src + '/.htaccess',
-			src + '/index.html'
-		],
-		dest: local
-	},
+	copyLocal: [
+		{src: src + '/.htaccess', dest: local},
+		{src: src + '/index.*', dest: local},
+		{src: src + '/dropbox-sdk/**/*.*', dest: local + '/dropbox-sdk'},
+		{src: src + '/images/**.*', dest: local + '/images'}
+	],
 	copyDeploy: [
 		{src: src + '/.htaccess', dest: deploy},
 		{src: local + '/webfonts/**', dest: deploy + '/webfonts'}

@@ -6,11 +6,10 @@ import assign from 'object-assign';
 
 // data storage - the values here are also the default settings
 let _data = OrderedMap({
-	debug: false,
-	webcam: false
+	breachCanvas: null
 });
 
-const AppStore = assign({}, BaseStore, {
+const ImageStore = assign({}, BaseStore, {
 	// public methods used by Controller-View to operate on data
 	getAll: function() {
 		return _data.toObject();
@@ -19,15 +18,11 @@ const AppStore = assign({}, BaseStore, {
 	dispatcherIndex: Dispatcher.register(function(payload) {
 		let action = payload.action;
 		switch(action.type) {
-			case Constants.ActionTypes.APP_DEBUG:
-				_data = _data.set('debug', action.boolean);
-				AppStore.emitChange();
-				break;
-			case Constants.ActionTypes.ADD_VIDEO_SRC:
-				_data = _data.set('webcam', true);   // used to determine if user has video setup yet (pages like arm, settings, etc require video to be working)
-				AppStore.emitChange();
+			case Constants.ActionTypes.CAPTURE_BREACH:
+				_data = _data.set('breachCanvas', action.canvas);
+				ImageStore.emitChange();
 				break;
 		}
 	})
 });
-export default AppStore;
+export default ImageStore;

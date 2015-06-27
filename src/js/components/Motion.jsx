@@ -92,14 +92,19 @@ export default React.createClass({
 			videoWidth   : this.state.videoWidth,
 			videoHeight  : this.state.videoHeight,
 			motionZones  : this.state.motionZones,
-			motionZoneDensity : this.props.motionZoneDensity
+			motionZoneDensity : this.props.motionZoneDensity,
+			armed: this.state.armed
 		};
+		let motionOverlayComponent   = this.state.effects ? <MotionOverlay motionDetected={this.state.motionDetected} /> : null;
+		let motionZonesGridComponent = this.state.effects ? <MotionZonesGrid {...motionZoneDensityProps} /> : null;
 		return (
 			<div id="motion-container" className="fill absolute">
-				<canvas ref="previousFrameCanvas" className="absolute"></canvas>
-				<canvas ref="currentFrameCanvas" className="absolute"></canvas>
-				<MotionOverlay motionDetected={this.state.motionDetected} />
-				<MotionZonesGrid {...motionZoneDensityProps} />
+				<div id="motion-canvas-frames-container">
+					<canvas ref="previousFrameCanvas" className="absolute"></canvas>
+					<canvas ref="currentFrameCanvas" className="absolute"></canvas>
+				</div>
+				{motionOverlayComponent}
+				{motionZonesGridComponent}
 			</div>
 		);
 	},

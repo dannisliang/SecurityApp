@@ -27,7 +27,11 @@ export default {
     ARM_START_COUNTDOWN: null,
     ARM_END_COUNTDOWN: null,
     ARM_COUNTDOWN_TICK: null,
-    ARM_RESET_COUNTDOWN: null
+    ARM_RESET_COUNTDOWN: null,
+    ARMED: null,
+    DISARMED: null,
+    DEBUG_TOGGLE_EFFECTS: null,
+    CAPTURE_BREACH: null
   }),
   // TODO: this will come in handy when be apis come into play
   ActionSources: keyMirror({

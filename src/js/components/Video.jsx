@@ -2,26 +2,58 @@ import React from 'react';
 import Addons from 'react/addons';
 import Constants from '../Constants';
 import MotionStore from '../stores/MotionStore';
+import SettingsStore from '../stores/SettingsStore';
+import ArmStore from '../stores/ArmStore';
 import MotionActions from '../actions/MotionActions';
+import ImageActions from '../actions/ImageActions';
 import GrantWebcamAccess from './GrantWebcamAccess.jsx';
+import assign from 'object-assign';
 var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
 	mixins: [PureRenderMixin],
+	// INITIAL STATE ////////////////////////
+	getInitialState: function() {
+		return assign({}, MotionStore.getAll(), SettingsStore.getAll(), ArmStore.getAll());
+	},
 	// LIFECYCLE ////////////////////////////
 	componentDidMount: function() {
-		this._onResize();
+		MotionStore.addChangeListener(this._onMotionChange);
+		SettingsStore.addChangeListener(this._onSettingsChange);
+		ArmStore.addChangeListener(this._onArmChange);
 		window.addEventListener('resize', this._onResize);
 		MotionStore.addRAFListener(this._onRAF);
+		this._onResize();
 	},
 	componentWillUnmount: function() {
+		MotionStore.removeChangeListener(this._onMotionChange);
+		SettingsStore.removeChangeListener(this._onSettingsChange);
+		ArmStore.removeChangeListener(this._onArmChange);
 		window.removeEventListener('resize', this._onResize);
 		MotionStore.removeRAFListener(this._onRAF);
 	},
-	componentWillReceiveProps: function(nextProps) {
-		if(nextProps.src && !this.props.src) {
-			setTimeout(this._handlePlay, 0);  // delay here to allow src to be set on element before trying to play it
+	componentDidUpdate: function(prevProps, prevState) {
+		var that = this;
+		if(!prevState.src && this.state.src) {
+			setTimeout(this._handlePlay, 0);
 		}
+		if(!this.captureBreachDelay && this.state.armed && this.state.motionDetected) {
+			// motion was detected when system was armed - need to take a full size cap of video
+			this._captureFrame(true);
+			this.captureBreachDelay = setTimeout(function() {
+				delete that.captureBreachDelay;
+			}, 500);
+		}
+	},
+	// EVENT HANDLERS ////////////////////////
+	_onMotionChange: function() {
+		this.setState(MotionStore.getAll());
+	},
+	_onSettingsChange: function() {
+		this.setState(SettingsStore.getAll());
+	},
+	_onArmChange: function() {
+		this.setState(ArmStore.getAll());
 	},
 	// EVENTS ////////////////////////////////
 	_onResize: function() {
@@ -51,15 +83,19 @@ export default React.createClass({
 			}
 		}, 100);
 	},
-	_captureFrame: function() {
+	_captureFrame: function(isSecurityBreachPhoto) {
 		var canvas        = document.createElement('canvas'),
 			video         = React.findDOMNode(this.refs.video),
-			captureWidth  = this.props.videoWidth / this.props.motionZoneDensity,
-			captureHeight = this.props.videoHeight / this.props.motionZoneDensity;
+			captureWidth  = isSecurityBreachPhoto ? this.state.videoWidth : this.state.videoWidth / this.state.motionZoneDensity,
+			captureHeight = isSecurityBreachPhoto ? this.state.videoHeight : this.state.videoHeight / this.state.motionZoneDensity;
 		canvas.width  = captureWidth;
 		canvas.height = captureHeight;
 		canvas.getContext('2d').drawImage(video, 0, 0, captureWidth, captureHeight);
-		MotionActions.captureFrame(canvas); // now that we have the frame, we need to send it to an action so other components like motion can see it
+		if(!isSecurityBreachPhoto) {
+			MotionActions.captureFrame(canvas); // now that we have the frame, we need to send it to an action so other components like motion can see it
+		} else {
+			ImageActions.captureBreach(canvas);
+		}
 	},
 	// USER INPUT EVENTS ////////////////////
 	_handleGetVideoSrc: function() {
@@ -71,11 +107,11 @@ export default React.createClass({
 			position: 'absolute',
 			bottom: 0
 		};
-		let grantWebcamAccess = this.props.src ? null : <GrantWebcamAccess />;
+		let grantWebcamAccess = this.state.src ? null : <GrantWebcamAccess />;
 		return (
 			<div id="video-container" className="absolute fill">
 				{grantWebcamAccess}
-				<video ref="video" className="video-cover" muted src={this.props.src}></video>
+				<video ref="video" className="video-cover" muted src={this.state.src}></video>
 			</div>
 		);
 	},

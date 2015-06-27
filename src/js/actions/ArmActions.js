@@ -22,5 +22,15 @@ export default {
 		Dispatcher.handleViewAction({
 			type: Constants.ActionTypes.ARM_RESET_COUNTDOWN
 		});
+	},
+	armed: function() {
+		Dispatcher.handleViewAction({
+			type: Constants.ActionTypes.ARMED
+		});
+	},
+	disarmed: function() {
+		Dispatcher.handleViewAction({
+			type: Constants.ActionTypes.DISARMED
+		});
 	}
 };

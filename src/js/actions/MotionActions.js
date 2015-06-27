@@ -58,5 +58,10 @@ export default {
 			type: Constants.ActionTypes.MOTION_ZONES,
 			array: array
 		});
+	},
+	debugToggleEffects: function() {
+		Dispatcher.handleViewAction({
+			type: Constants.ActionTypes.DEBUG_TOGGLE_EFFECTS
+		});
 	}
 };
