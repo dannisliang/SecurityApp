@@ -43,9 +43,9 @@ export default React.createClass({
 	// RENDERING ////////////////////////////
 	_getLinkComponents: function() {
 		let links = [
-			{dest: 'menu', icon: 'M', enabled: true},
-			{dest: 'settings', icon: 'S', enabled: this.state.webcam},
-			{dest: 'arm', icon: 'A', enabled: this.state.webcam}
+			{dest: 'menu', icon: 'icon-menu', enabled: true},
+			{dest: 'settings', icon: 'icon-gear', enabled: this.state.webcam},
+			{dest: 'arm', icon: 'icon-shield red', enabled: this.state.webcam}
 		];
 		let linkComponents = [];
 		for(var i=0, l=links.length; i<l; i++) {
@@ -54,7 +54,7 @@ export default React.createClass({
 			if(link.enabled) {
 				linkComponents.push(
 					<a onClick={this._navigate.bind(this, link.dest)} href="#" className={className}>
-						<span className="table-cell-valign">{link.icon}</span>
+						<span className="table-cell-valign"><i className={'icon '+link.icon} /></span>
 					</a>
 				);
 			}

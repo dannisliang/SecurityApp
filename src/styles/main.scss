@@ -12,7 +12,11 @@ body {
 	background: #000;
 	overflow-x: hidden;
 }
+.red {
+	color: $red;
+}
 .icon {
+	font-size: 20px;
 	display: inline-block;
 	height: 0;
 	speak: none;
