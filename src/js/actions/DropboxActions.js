@@ -3,20 +3,16 @@ import Constants from '../Constants';
 import Core from '../Core';
 
 export default {
-	getAuthUrl: function() {
+	authorize: function() {
 		Dispatcher.handleViewAction({
-			type: Constants.ActionTypes.DB_GET_AUTH_URL
+			type: Constants.ActionTypes.DROPBOX_AUTHORIZE
 		});
 	},
-	authInProgress: function() {
+	saveCanvasAsImage: function(canvas) {
+		console.log('')
 		Dispatcher.handleViewAction({
-			type: Constants.ActionTypes.DB_AUTH_IN_PROGRESS
+			type: Constants.ActionTypes.DROPBOX_SAVE_CANVAS_AS_IMAGE,
+			canvas: canvas
 		});
-	},
-	sendAuthCode: function(string) {
-		Dispatcher.handleViewAction({
-			type: Constants.ActionTypes.DB_SEND_AUTH_CODE,
-			string: string
-		});
-	},
+	}
 };

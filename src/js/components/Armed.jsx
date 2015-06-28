@@ -1,13 +1,17 @@
 import React from 'react';
 import Addons from 'react/addons';
 import ImageStore from '../stores/ImageStore';
+import DropboxStore from '../stores/DropboxStore';
+import DropboxActions from '../actions/DropboxActions';
+import assign from 'object-assign';
+import Core from '../Core';
 var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
 	mixins: [PureRenderMixin],
 	// INITIAL STATE ////////////////////////
 	getInitialState: function() {
-		return ImageStore.getAll();
+		return assign({}, DropboxStore.getAll(), ImageStore.getAll());
 	},
 	// LIFECYCLE ////////////////////////////
 	componentDidMount: function() {
@@ -19,7 +23,6 @@ export default React.createClass({
 	componentDidUpdate: function(prevProps, prevState) {
 		if(this.state.breachCanvas) {
 			this._renderBreachImage();
-			React.findDOMNode(this.refs.fakeClickButton).click();
 		}
 	},
 	// EVENT HANDLERS ////////////////////////
@@ -32,7 +35,7 @@ export default React.createClass({
 		canvas.width = 640;
 		canvas.height = 480;
 		context.drawImage(this.state.breachCanvas, 0, 0, canvas.width, canvas.height);
-		let dataURL = canvas.toDataURL('image/png');
+		DropboxActions.saveCanvasAsImage(canvas);
 	},
 	render: function() {
 		return (

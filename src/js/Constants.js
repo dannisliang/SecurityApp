@@ -34,7 +34,10 @@ export default {
     CAPTURE_BREACH: null,
     DB_GET_AUTH_URL: null,
     DB_AUTH_IN_PROGRESS: null,
-    DB_SEND_AUTH_CODE: null
+    DB_SEND_AUTH_CODE: null,
+    DROPBOX_AUTHORIZED: null,
+    DROPBOX_AUTHORIZE: null,
+    DROPBOX_SAVE_CANVAS_AS_IMAGE: null
   }),
   // TODO: this will come in handy when be apis come into play
   ActionSources: keyMirror({

@@ -28,25 +28,7 @@ export default React.createClass({
 	},
 	_handleDropboxAuthorizeClick: function(e) {
 		e.preventDefault();
-		var client = new Dropbox.Client({key: "xqb4jksizxtzf1k"});
-		client.authDriver(new Dropbox.AuthDriver.Popup({
-			rememberUser: false,
-			receiverUrl: 'http://localhost/dropbox-oauth.html'
-		}));
-		client.authenticate(function(error, client) {
-		  if (error) {
-		    console.log(error);
-		    return;
-		  }
-		  console.log(client);
-		  client.writeFile("hello_world.txt", "Hello, world!\n", function(error, stat) {
-  if (error) {
-    return showError(error);  // Something went wrong.
-  }
-
-  alert("File saved as revision " + stat.versionTag);
-});
-		});
+		DropboxActions.authorize();
 	},
 	_handleDropboxAuthCodeSubmit: function(event) {
 		event.preventDefault();

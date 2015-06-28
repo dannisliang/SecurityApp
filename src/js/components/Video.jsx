@@ -42,7 +42,7 @@ export default React.createClass({
 			this._captureFrame(true);
 			this.captureBreachDelay = setTimeout(function() {
 				delete that.captureBreachDelay;
-			}, 500);
+			}, 400);
 		}
 	},
 	// EVENT HANDLERS ////////////////////////
