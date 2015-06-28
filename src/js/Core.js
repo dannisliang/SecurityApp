@@ -17,7 +17,7 @@ export default {
 			});
 		} else if(errorCallback) { errorCallback(); }
 	},
-	ajax: function(url, opts) {
+	/*ajax: function(url, opts) {
 		let defaults = {
 			method: 'GET',
 			successCallback: null,
@@ -54,33 +54,24 @@ export default {
 			}
 		}
 		return str.join("&");
-	},
-	stringToArrayBuffer: function(str) {
-		var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
-	    var bufView = new Uint16Array(buf);
-	    for (var i=0, strLen=str.length; i<strLen; i++) {
-	        bufView[i] = str.charCodeAt(i);
-	    }
-	    return buf;
-	},
+	},*/
 	base64ToArrayBuffer: function(base64) {
 	    base64 = base64.split('data:image/png;base64,').join('');
-	    var binary_string =  window.atob(base64),
+	    let binary_string =  window.atob(base64),
 	        len = binary_string.length,
 	        bytes = new Uint8Array( len ),
 	        i;
-	    for (i = 0; i < len; i++)        {
+	    for(i = 0; i < len; i++) {
 	        bytes[i] = binary_string.charCodeAt(i);
 	    }
 	    return bytes.buffer;
 	},
-	// timestamp code from https://gist.github.com/hurjas/2660489
 	timestamp: function() {
-		var now = new Date();
-		var date = [now.getMonth() + 1, now.getDate(), now.getFullYear()];
-		var time = [now.getHours(), now.getMinutes(), now.getSeconds()];
-		var suffix = ( time[0] < 12 ) ? "AM" : "PM";
-		time[0] = ( time[0] < 12 ) ? time[0] : time[0] - 12;
+		let now    = new Date(),
+			date   = [now.getMonth() + 1, now.getDate(), now.getFullYear()],
+			time   = [now.getHours(), now.getMinutes(), now.getSeconds()],
+			suffix = ( time[0] < 12 ) ? "AM" : "PM";
+		time[0] = (time[0] < 12) ? time[0] : time[0] - 12;
 		time[0] = time[0] || 12;
 		for(var i = 1; i<3; i++) {
 			if (time[i] < 10 ) {

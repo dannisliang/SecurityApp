@@ -8,6 +8,7 @@ import React from 'react';
 import Addons from 'react/addons';
 import AppStore from '../stores/AppStore';
 import {navigate} from 'react-mini-router';
+import DropboxActions from '../actions/DropboxActions';
 var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
@@ -36,6 +37,8 @@ export default React.createClass({
 		// it needs a delay here because of a strange bug with react-mini-router
 		// rendering twice unless navigate is in a delay
 		setTimeout(function() { navigate(dest); }, 0);
+		// if user is moving to the arm section of the app, we should try to authenticate dropbox
+		DropboxActions.authenticate();
 	},
 	// RENDERING ////////////////////////////
 	_getLinkComponents: function() {

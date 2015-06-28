@@ -7,7 +7,8 @@ import assign from 'object-assign';
 
 // data storage - the values here are also the default settings
 let _data = OrderedMap({
-	dropboxClient: null
+	dropboxClient : null,
+	dropboxError  : false
 });
 
 const DropboxStore = assign({}, BaseStore, {
@@ -22,16 +23,18 @@ const DropboxStore = assign({}, BaseStore, {
 			case Constants.ActionTypes.DROPBOX_AUTHORIZE:
 				let client = new Dropbox.Client({key: "xqb4jksizxtzf1k"});
 				client.authDriver(new Dropbox.AuthDriver.Popup({
-					rememberUser: false,
-					receiverUrl: 'http://localhost/dropbox-oauth.html'
+					rememberUser : true,
+					receiverUrl  : 'http://localhost/dropbox-oauth.html'
 				}));
 				client.authenticate(function(error, client) {
-				  if(error) {
-				    console.log(error);
-				    return;
-				  }
-				  _data = _data.set('dropboxClient', client);
-				  DropboxStore.emitChange();
+					if(error) {
+						// TODO: handle case in component
+						console.warn(error);
+						_data = _data.set('dropboxError', error);
+						return;
+					}
+					_data = _data.set('dropboxClient', client);
+					DropboxStore.emitChange();
 				});
 				break;
 			case Constants.ActionTypes.DROPBOX_SAVE_CANVAS_AS_IMAGE:
