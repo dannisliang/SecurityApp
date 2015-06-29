@@ -1,14 +1,12 @@
-import React from 'react';
-import Addons from 'react/addons';
+import React from 'react/addons';
 import SettingsActions from '../actions/SettingsActions';
 import SettingsStore from '../stores/SettingsStore';
 import Dispatcher from '../Dispatcher';
 import {navigate} from 'react-mini-router';
-var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
 	// MIXINS /////////////////////////////
-	mixins: [PureRenderMixin],
+	mixins: [React.addons.PureRenderMixin],
 	getDefaultProps: function() {
 		return {
 			minSensitivity: 25,

@@ -9,6 +9,8 @@ var errorHandler = config.errorHandler;
 config = config.watch;
 
 gulp.task('watch', ['build'], function() {
-	gulp.watch(config.src, config.tasks)
-		.on('error',errorHandler);
+	for(var i=0, l=config.length; i<l; i++) {
+		gulp.watch(config[i].src, config[i].tasks)
+			.on('error', errorHandler);
+	}
 });

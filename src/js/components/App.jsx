@@ -3,9 +3,8 @@ App
 =============
 This component handles the main skeleton app structure (header, content, footer) as well as pushstate routing
 */
-import React, {PropTypes} from 'react';
+import React, {PropTypes} from 'react/addons';
 import {RouterMixin, navigate} from 'react-mini-router';
-import Addons from 'react/addons';
 import Debug from './Debug.jsx';
 import Navigation from './Navigation.jsx';
 import VideoAndMotion from './VideoAndMotion.jsx';
@@ -13,11 +12,9 @@ import Arm from './Arm.jsx';
 import Settings from './Settings.jsx';
 import AppActions from '../actions/AppActions';
 import AppStore from '../stores/AppStore';
-var PureRenderMixin = Addons.addons.PureRenderMixin;
-var ReactCSSTransitionGroup = Addons.addons.CSSTransitionGroup;
 
 export default React.createClass({
-	mixins: [PureRenderMixin, RouterMixin],
+	mixins: [React.addons.PureRenderMixin, RouterMixin],
 // INITIAL STATE ////////////////////////
 	getInitialState: function() {
 		return AppStore.getAll();
@@ -62,16 +59,17 @@ export default React.createClass({
 		Returns content components based on the current path
 	*/
 	_getContent: function(path) {
-		let content = null;
 		switch(path) {
 			case 'settings':
-				content = <Settings key={'settings'} />;
+				return <Settings />;
 				break;
 			case 'arm':
-				content = <Arm key={'arm'} />;
+				return <Arm />;
+				break;
+			default:
+				return null;
 				break;
 		}
-		return content;
 	},
 	/*
 		Handles checking prerequsites for certain paths. For example,
@@ -102,9 +100,7 @@ export default React.createClass({
 				<Navigation path={path} />
 					<div id="content-container" className={'fl'+(path ? ' active' : '')}>
 						<div id="content-container-inner" className="fl">
-							<ReactCSSTransitionGroup className="fill" component="div" transitionName="content">
-								{this._getContent(path)}
-							</ReactCSSTransitionGroup>
+							{this._getContent(path)}
 						</div>
 					</div>
 				<VideoAndMotion />

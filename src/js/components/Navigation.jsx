@@ -4,15 +4,13 @@ Navigation
 This component handles the main side icon menu functionality
 */
 
-import React from 'react';
-import Addons from 'react/addons';
+import React from 'react/addons';
 import AppStore from '../stores/AppStore';
 import {navigate} from 'react-mini-router';
 import DropboxActions from '../actions/DropboxActions';
-var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
-	mixins: [PureRenderMixin],
+	mixins: [React.addons.PureRenderMixin],
 	// INITIAL STATE ////////////////////////
 	getInitialState: function() {
 		return AppStore.getAll();
@@ -38,7 +36,9 @@ export default React.createClass({
 		// rendering twice unless navigate is in a delay
 		setTimeout(function() { navigate(dest); }, 0);
 		// if user is moving to the arm section of the app, we should try to authenticate dropbox
-		DropboxActions.authenticate();
+		if(destination === 'arm') {
+			DropboxActions.authenticate();
+		}
 	},
 	// RENDERING ////////////////////////////
 	_getLinkComponents: function() {
@@ -53,7 +53,7 @@ export default React.createClass({
 				className = this.props.path === link.dest ? 'table selected' : 'table';
 			if(link.enabled) {
 				linkComponents.push(
-					<a onClick={this._navigate.bind(this, link.dest)} href="#" className={className}>
+					<a onClick={this._navigate.bind(this, link.dest)} href="#" className={className} key={link.dest}>
 						<span className="table-cell-valign"><i className={'icon '+link.icon} /></span>
 					</a>
 				);

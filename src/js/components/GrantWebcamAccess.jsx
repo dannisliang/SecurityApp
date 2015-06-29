@@ -1,12 +1,10 @@
-import React from 'react';
-import Addons from 'react/addons';
+import React from 'react/addons';
 import MotionActions from '../actions/MotionActions';
 import DropboxActions from '../actions/DropboxActions';
 import DropboxStore from '../stores/DropboxStore';
-var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
-	mixins: [PureRenderMixin],
+	mixins: [React.addons.PureRenderMixin],
 	// INITIAL STATE ////////////////////////
 	getInitialState: function() {
 		return DropboxStore.getAll();

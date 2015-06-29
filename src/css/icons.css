@@ -1,0 +1,37 @@
+@font-face {
+	font-family: "mn-icon-font";
+	src: url('../webfonts/mn-icon-font.eot');
+	src: url('../webfonts/mn-icon-font.eot?#iefix') format('eot'),
+		url('../webfonts/mn-icon-font.woff') format('woff'),
+		url('../webfonts/mn-icon-font.ttf') format('truetype'),
+		url('../webfonts/mn-icon-font.svg#mn-icon-font') format('svg');
+}
+
+.icon:before {
+	font-family: "mn-icon-font";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	/* speak: none; only necessary if not using the private unicode range (firstGlyph option) */
+	text-decoration: none;
+	text-transform: none;
+}
+
+
+.icon-gear:before {
+	content: "\E001";
+}
+
+.icon-menu:before {
+	content: "\E002";
+}
+
+.icon-ninja-star:before {
+	content: "\E003";
+}
+
+.icon-shield:before {
+	content: "\E004";
+}

@@ -1,9 +1,7 @@
-import React from 'react';
-import Addons from 'react/addons';
-var PureRenderMixin = Addons.addons.PureRenderMixin;
+import React from 'react/addons';
 
 export default React.createClass({
-	mixins: [PureRenderMixin],
+	mixins: [React.addons.PureRenderMixin],
 	// LIFECYCLE //////////////////////////
 	componentDidMount: function() {
 		this.canvas = React.findDOMNode(this.refs.canvas);

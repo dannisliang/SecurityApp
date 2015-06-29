@@ -1,5 +1,4 @@
-import React from 'react';
-import Addons from 'react/addons';
+import React from 'react/addons';
 import ArmStore from '../stores/ArmStore';
 import DropboxStore from '../stores/DropboxStore';
 import MotionStore from '../stores/MotionStore';
@@ -8,10 +7,9 @@ import ArmCountdown from './ArmCountdown.jsx';
 import Armed from './Armed.jsx';
 import {navigate} from 'react-mini-router';
 import assign from 'object-assign';
-var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
-	mixins: [PureRenderMixin],
+	mixins: [React.addons.PureRenderMixin],
 	// INITIAL STATE ////////////////////////
 	getInitialState: function() {
 		return assign({}, MotionStore.getAll(), ArmStore.getAll(), DropboxStore.getAll());

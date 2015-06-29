@@ -1,14 +1,12 @@
-import React from 'react';
-import Addons from 'react/addons';
+import React from 'react/addons';
 import ImageStore from '../stores/ImageStore';
 import DropboxStore from '../stores/DropboxStore';
 import DropboxActions from '../actions/DropboxActions';
 import assign from 'object-assign';
 import Core from '../Core';
-var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
-	mixins: [PureRenderMixin],
+	mixins: [React.addons.PureRenderMixin],
 	// INITIAL STATE ////////////////////////
 	getInitialState: function() {
 		return assign({}, DropboxStore.getAll(), ImageStore.getAll());

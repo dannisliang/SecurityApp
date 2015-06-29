@@ -5,25 +5,27 @@ Overall settings for all grunt tasks. You shouldn't have to edit anything in /ta
 unless it's to add functionality etc.
 */
 var src    = './src',       // raw files to edit
-	local  = './local',     // local dev folder (compiled but not concat or minified)
-	deploy = './deploy',    // minified and concat files for deploy
+	tmp    = './src/.tmp',  // temporary folder to hold things like compiled scss
+	dist   = './dist',      // minified and concat files for deployment
 	gutil  = require('gulp-util');
 
 module.exports = {
+	build: {
+		src: src + '/**/*.*'
+	},
 	server: {
 		settings: {
-			base     : local,
-			hostname : 'local.securityapp.com',
-			port     : 80,
-			livereload: {
-				port: 35929
-			}
+			root       : src,
+			hostname   : 'local.securityapp.com',
+			port       : 80,
+			livereload : true,
+			fallback   : src + '/index.html'
 		}
 	},
 	sass: {
-		src  : src + '/styles/**/*.{sass,scss,css}',
-		sass : src + '/styles',
-		dest : local + '/styles',
+		src  : src + '/scss/**/*.scss',
+		sass : src + '/scss',
+		dest : tmp + '/css',
 		compassConfig: '../.config.rb',		  // compass configuration file
 		settings: {
 			indentedSyntax : false,
@@ -31,11 +33,11 @@ module.exports = {
 		}
 	},
 	iconfont: {
-		src: src + '/svgs/*.svg',
-		dest: local + '/webfonts',
+		src: src + '/svg/*.svg',
+		dest: src + '/webfonts',
 		cssOptions: {
 			fontName: 'mn-icon-font',
-			targetPath: '../styles/icons.css',
+			targetPath: '../css/icons.css',
 			fontPath: '../webfonts/'
 		},
 		fontOptions: {
@@ -49,43 +51,49 @@ module.exports = {
 			transform: ['babelify', 'reactify']
 		},
 		src        : src + '/js/index.jsx',
-		dest       : local + '/js',
+		dest       : tmp + '/js',
 		outputName : 'index.js',
 		debug      : gutil.env.type === 'dev'
 	},
-	watch: {
-		src   : 'src/**/*.*',
-		tasks : ['build']
-	},
-	copyLocal: [
-		{src: [src + '/.htaccess', src + '/*.html'], dest: local}
+	watch: [
+		{
+			src   : src + '/js/**/*.{js,jsx}',
+			tasks : ['browserify']
+		},
+		{
+			src   : src + '/scss/**/*.scss',
+			tasks : ['styles']
+		},
+		{
+			src   : src + '/svg/**/*.*',
+			tasks : ['iconfont']
+		}
 	],
-	copyDeploy: [
-		{src: src + '/.htaccess', dest: deploy},
-		{src: local + '/webfonts/**', dest: deploy + '/webfonts'}
+	copy: [
+		{src: src + '/.htaccess', dest: dist},
+		{src: src + '/webfonts/**', dest: dist + '/webfonts'}
 	],
 	rev: {
-		src: deploy + '/**/*.{html,css,js,woff,woff2,eot,ttf}',
-		dest: deploy
+		src: dist + '/**/*.{html,css,js,woff,woff2,eot,ttf}',
+		dest: dist
 	},
 	deploy: {
 		src  : src + '/**',
-		dest : deploy,
+		dest : dist,
 		usemin: {
-			src: local + '/index.html',
-			dest: deploy
+			src: src + '/index.html',
+			dest: dist
 		},
 		rsync: {
 			destination : '/home/180199/domains/securityapp.justin-schrader.com/html',
-			src         : [deploy + '/**', deploy + '/.htaccess'],
-			root        : deploy,
+			src         : [dist + '/**', dist + '/.htaccess'],
+			root        : dist,
 			hostname    : 's180199.gridserver.com',
 			username    : 'justin-schrader.com',
-			progress    : false  // handy for debugging what is being deployed
+			progress    : false  // handy for debugging what is being disted
 		}
 	},
-	clean: [deploy],
-	cleanLocal: [local],
+	clean: [dist, tmp],
 	errorHandler: function(error) {
 		console.log(error.toString());
 		this.emit('end');

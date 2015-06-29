@@ -1,5 +1,4 @@
-import React from 'react';
-import Addons from 'react/addons';
+import React from 'react/addons';
 import Constants from '../Constants';
 import MotionStore from '../stores/MotionStore';
 import SettingsStore from '../stores/SettingsStore';
@@ -8,10 +7,9 @@ import MotionActions from '../actions/MotionActions';
 import ImageActions from '../actions/ImageActions';
 import GrantWebcamAccess from './GrantWebcamAccess.jsx';
 import assign from 'object-assign';
-var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
-	mixins: [PureRenderMixin],
+	mixins: [React.addons.PureRenderMixin],
 	// INITIAL STATE ////////////////////////
 	getInitialState: function() {
 		return assign({}, MotionStore.getAll(), SettingsStore.getAll(), ArmStore.getAll());

@@ -1,11 +1,9 @@
-import React from 'react';
-import Addons from 'react/addons';
+import React from 'react/addons';
 import DropboxActions from '../actions/DropboxActions';
 import {navigate} from 'react-mini-router';
-var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
-	mixins: [PureRenderMixin],
+	mixins: [React.addons.PureRenderMixin],
 	// USER INPUT EVENTS ////////////////
 	_handleCancelClick: function() {
 		event.preventDefault();

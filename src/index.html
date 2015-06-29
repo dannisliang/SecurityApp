@@ -3,12 +3,12 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Security App Experiment</title>
-		<!-- build:css styles/style.css -->
-		<link rel="stylesheet" href="styles/icons.css">
-		<link rel="stylesheet" href="styles/main.css">
-		<link rel="stylesheet" href="styles/navigation.css">
-		<link rel="stylesheet" href="styles/video-and-motion.css">
-		<link rel="stylesheet" href="styles/arm.css">
+		<!-- build:css css/mn.css -->
+		<link rel="stylesheet" href="css/icons.css">
+		<link rel="stylesheet" href=".tmp/css/main.css">
+		<link rel="stylesheet" href=".tmp/css/navigation.css">
+		<link rel="stylesheet" href=".tmp/css/video-and-motion.css">
+		<link rel="stylesheet" href=".tmp/css/arm.css">
 		<!-- endbuild -->
 		<script src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js"></script>
 	</head>
@@ -16,8 +16,9 @@
 		<div id="main" class="fill">
 			<!-- Flux goes here -->
 		</div>
+		<!-- reactify concats and compiles jsx into an index.js file in the .tmp folder -->
 		<!-- build:js js/index.js -->
-		<script src="js/index.js"></script>
+		<script src=".tmp/js/index.js"></script>
 		<!-- endbuild -->
 	</body>
 </html>

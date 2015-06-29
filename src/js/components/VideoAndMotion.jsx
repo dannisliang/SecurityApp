@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react/addons';
 import Video from './Video.jsx';
 import Motion from './Motion.jsx';
 import Settings from './Settings.jsx';

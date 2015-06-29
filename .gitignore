@@ -1,5 +1,5 @@
 /bower_components/
-/local/
-/deploy/
+/dist/
 /node_modules/
 /.sass-cache/
+/src/.tmp/

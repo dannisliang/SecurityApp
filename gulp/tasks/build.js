@@ -7,9 +7,9 @@ var gulp = require('gulp');
 var connect = require('gulp-connect');
 var config = require('../config');
 var errorHandler = config.errorHandler;
-config = config.watch;
+config = config.build;
 
-gulp.task('build', ['browserify', 'iconfont', 'styles', 'copyLocal'], function() {
+gulp.task('build', ['clean', 'browserify', 'styles', 'iconfont'], function() {
 	gulp.src(config.src)
 		.pipe(connect.reload())
 		.on('error',errorHandler);

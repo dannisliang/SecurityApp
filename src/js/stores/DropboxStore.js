@@ -1,4 +1,4 @@
-import { OrderedMap } from 'immutable';
+import React from 'react/addons';
 import Dispatcher from '../Dispatcher';
 import Constants from '../Constants';
 import BaseStore from './BaseStore';
@@ -6,15 +6,15 @@ import Core from '../Core';
 import assign from 'object-assign';
 
 // data storage - the values here are also the default settings
-let _data = OrderedMap({
+let _data = {
 	dropboxClient : null,
 	dropboxError  : false
-});
+};
 
 const DropboxStore = assign({}, BaseStore, {
 	// public methods used by Controller-View to operate on data
 	getAll: function() {
-		return _data.toObject();
+		return _data;
 	},
 	// register store with dispatcher, allowing actions to flow through
 	dispatcherIndex: Dispatcher.register(function(payload) {
@@ -29,19 +29,21 @@ const DropboxStore = assign({}, BaseStore, {
 				client.authenticate(function(error, client) {
 					if(error) {
 						// TODO: handle case in component
-						console.warn(error);
-						_data = _data.set('dropboxError', error);
+						_data = React.addons.update(_data, {
+							dropboxError: {$set: error}
+						});
 						return;
 					}
-					_data = _data.set('dropboxClient', client);
+					_data = React.addons.update(_data, {
+						dropboxClient: {$set: client}
+					});
 					DropboxStore.emitChange();
 				});
 				break;
 			case Constants.ActionTypes.DROPBOX_SAVE_CANVAS_AS_IMAGE:
 				let data = Core.base64ToArrayBuffer(action.canvas.toDataURL('image/png'));
 				let fileName = 'security-breach-'+Core.timestamp()+'.png';
-				console.log(fileName);
-				_data.get('dropboxClient').writeFile(fileName, data, function(error, stat){
+				_data.dropboxClient.writeFile(fileName, data, function(error, stat){
 					if(error) {
 						console.log(error);
 						return;

@@ -1,9 +1,7 @@
-import React from 'react';
-import Addons from 'react/addons';
-var PureRenderMixin = Addons.addons.PureRenderMixin;
+import React from 'react/addons';
 
 export default React.createClass({
-	mixins: [PureRenderMixin],
+	mixins: [React.addons.PureRenderMixin],
 	// RENDERING ////////////////////////////
 	render: function() {
 		let blueClassName = 'overlay-container fill absolute' + (this.props.motionDetected ? '' : ' active');

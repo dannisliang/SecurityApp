@@ -1,14 +1,12 @@
-import React from 'react';
-import Addons from 'react/addons';
+import React from 'react/addons';
 import Constants from '../Constants';
 import MotionStore from '../stores/MotionStore';
 import MotionActions from '../actions/MotionActions';
 import MotionOverlay from './MotionOverlay.jsx';
 import MotionZonesGrid from './MotionZonesGrid.jsx';
-var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
-	mixins: [PureRenderMixin],
+	mixins: [React.addons.PureRenderMixin],
 	// INITIAL STATE ////////////////////////
 	getInitialState: function() {
 		return MotionStore.getAll();

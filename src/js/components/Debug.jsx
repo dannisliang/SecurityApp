@@ -1,15 +1,13 @@
-import React from 'react';
-import Addons from 'react/addons';
+import React from 'react/addons';
 import MotionStore from '../stores/MotionStore';
 import ArmStore from '../stores/ArmStore';
 import ImageStore from '../stores/ImageStore';
 import MotionActions from '../actions/MotionActions';
 import ArmActions from '../actions/ArmActions';
 import assign from 'object-assign';
-var PureRenderMixin = Addons.addons.PureRenderMixin;
 
 export default React.createClass({
-	mixins: [PureRenderMixin],
+	mixins: [React.addons.PureRenderMixin],
 	// INITIAL STATE ////////////////////////
 	getInitialState: function() {
 		return assign({}, MotionStore.getAll(), ArmStore.getAll(), ImageStore.getAll());
