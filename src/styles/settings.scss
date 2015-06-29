@@ -1,0 +1,19 @@
+@import "./_common";
+@import "compass/css3/animation";
+@import "compass/css3/transform";
+@import "compass/css3/images";
+
+@include keyframes(ninja-star) {
+	from {
+		@include rotateZ(0deg);
+	}
+	to {
+		@include rotateZ(360deg);
+	}
+}
+
+#settings-container {
+	.close-button {
+		position: absolute;
+	}
+}
