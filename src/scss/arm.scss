@@ -1,5 +1,6 @@
 @import "./_common";
 @import "compass/css3/animation";
+@import "compass/css3/transition";
 @import "compass/css3/transform";
 @import "compass/css3/images";
 
@@ -13,6 +14,7 @@
 }
 
 #arm-container {
+	@include transition(background 0.1s linear);
 	@include background(radial-gradient(center, ellipse cover, #404350 0%,rgba(29,30,33,1) 100%));
 	color: $red;
 	h1 {
@@ -23,8 +25,11 @@
 		max-width: 320px;
 		margin: 0 auto;
 	}
-}
-.section-arm {
+	#armed {
+		&.motion {
+			background: #FFF;
+		}
+	}
 	#arm-icon-ninja-star:before {
 		@include animation(ninja-star 10s linear 0s infinite);
 		font-size: 3em;

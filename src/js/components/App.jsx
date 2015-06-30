@@ -93,7 +93,7 @@ export default React.createClass({
 	_content: function(path) {
 		if(typeof path === 'object') { path = false; }      // when no mode is passed it defaults to object in react-mini-router for some reason, so just convert it to false instead
 		if(!this._checkPrerequsites(path)) {                // check if the current route is allowed (for example, arm and settings sections require webcam video to be working)
-			setTimeout(function(){ navigate('/'); }, 0);    // redirect back to home if route is invalid
+		//	setTimeout(function(){ navigate('/'); }, 0);    // redirect back to home if route is invalid
 		}
 		return (
 			<div className={'fill'+(path ? ' section-'+path : '')}>

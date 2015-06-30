@@ -36,11 +36,13 @@ export default React.createClass({
 			setTimeout(this._handlePlay, 0);
 		}
 		if(!this.captureBreachDelay && this.state.armed && this.state.motionDetected) {
-			// motion was detected when system was armed - need to take a full size cap of video
-			this._captureFrame(true);
+			// motion was detected when system was armed - need to take a cap of video
+			setTimeout(function(){
+				that._captureFrame(true);
+			}, 500);
 			this.captureBreachDelay = setTimeout(function() {
 				delete that.captureBreachDelay;
-			}, 400);
+			}, 500);
 		}
 	},
 	// EVENT HANDLERS ////////////////////////

@@ -55,6 +55,9 @@ export default {
 		}
 		return str.join("&");
 	},*/
+	capitalize: function(string) {
+		return string.charAt(0).toUpperCase() + string.slice(1);
+	},
 	base64ToArrayBuffer: function(base64) {
 	    base64 = base64.split('data:image/png;base64,').join('');
 	    let binary_string =  window.atob(base64),
@@ -78,6 +81,6 @@ export default {
 				time[i] = "0" + time[i];
 			}
 		}
-		return date.join('_') + '-' + time.join(':') + '-' + suffix;
+		return date.join('_') + '-' + time.join(':') + '-' + suffix + '-' + now.getMilliseconds();
 	}
 }

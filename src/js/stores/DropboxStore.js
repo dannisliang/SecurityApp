@@ -10,6 +10,7 @@ let _data = {
 	dropboxClient : null,
 	dropboxError  : false
 };
+let _imageFinishedUploading = true;
 
 const DropboxStore = assign({}, BaseStore, {
 	// public methods used by Controller-View to operate on data
@@ -41,13 +42,16 @@ const DropboxStore = assign({}, BaseStore, {
 				});
 				break;
 			case Constants.ActionTypes.DROPBOX_SAVE_CANVAS_AS_IMAGE:
+				if(!_imageFinishedUploading) { return; }
 				let data = Core.base64ToArrayBuffer(action.canvas.toDataURL('image/png'));
-				let fileName = 'security-breach-'+Core.timestamp()+'.png';
+				let fileName = 'mugshot-ninja-'+Core.timestamp()+'.png';
+				_imageFinishedUploading = false;
 				_data.dropboxClient.writeFile(fileName, data, function(error, stat){
 					if(error) {
-						console.log(error);
+						// TODO: handle
 						return;
 					}
+					_imageFinishedUploading = true;
 				});
 				break;
 		}

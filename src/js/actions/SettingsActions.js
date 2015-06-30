@@ -37,5 +37,11 @@ export default {
 			type: Constants.ActionTypes.ACTIVE_ZONES_NEEDED,
 			number: number
 		});
+	},
+	setImageCaptureSize: function(string) {
+		Dispatcher.handleViewAction({
+			type   : Constants.ActionTypes.SET_IMAGE_CAPTURE_SIZE,
+			string : string
+		});
 	}
 };

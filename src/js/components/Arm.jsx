@@ -82,9 +82,12 @@ export default React.createClass({
 			armCountdownParams = {
 				countdownSeconds: this.state.countdownSeconds,
 				dropboxClient: this.state.dropboxClient
+			},
+			armedParams = {
+				motionDetected: this.state.motionDetected
 			};
 		if(this.state.countdownComplete) {
-			armContentComponent = <Armed />;
+			armContentComponent = <Armed {...armedParams} />;
 		} else {
 			armContentComponent = <ArmCountdown {...armCountdownParams} />;
 		}

@@ -2,6 +2,7 @@ import React from 'react/addons';
 import SettingsActions from '../actions/SettingsActions';
 import SettingsStore from '../stores/SettingsStore';
 import Dispatcher from '../Dispatcher';
+import Core from '../Core';
 import {navigate} from 'react-mini-router';
 
 export default React.createClass({
@@ -16,6 +17,7 @@ export default React.createClass({
 	// INITIAL STATE //////////////////////
 	getInitialState: function() {
 		return SettingsStore.getAll();
+		console.log(this.state);
 	},
 	// EVENTS /////////////////////////////
 	_onChange: function() {
@@ -46,11 +48,31 @@ export default React.createClass({
 	_handleChangeActiveZonesNeeded: function(event) {
 		SettingsActions.setActiveZonesNeeded(event.target.value);
 	},
+	_handleImageCaptureSizeChange: function(event) {
+		SettingsActions.setImageCaptureSize(event.target.value);
+	},
 	_handleClose: function(event) {
 		event.preventDefault();
 		setTimeout(function() { navigate('/'); }, 0);
 	},
 	// RENDERING ////////////////////////
+	_renderImageCaptureSelect: function() {
+		let imageCaptureOptionComponents = [];
+		for(var i=0, l=this.state.imageCaptureSizes.length; i<l; i++) {
+			let imageCaptureSize = this.state.imageCaptureSizes[i],
+				label = Core.capitalize(imageCaptureSize.value) + ' (' + imageCaptureSize.width + 'x' + imageCaptureSize.height + ')';
+			imageCaptureOptionComponents.push(
+				<option value={imageCaptureSize.value} key={i}>
+					{label}
+				</option>
+			);
+		}
+		return (
+			<select value={this.state.imageCaptureSize.value} onChange={this._handleImageCaptureSizeChange}>
+				{imageCaptureOptionComponents}
+			</select>
+		);
+	},
 	render: function() {
 		// this takes the actual sensitivity val and converts it to 0-100% to be more clear to user
 		// TODO: all sliders should follow this principal
@@ -84,6 +106,11 @@ export default React.createClass({
 						<fieldset>
 							<label>Active Zones Needed</label>
 							<input type="range" min="1" max="100" defaultValue={this.state.activeZonesNeeded} onChange={this._handleChangeActiveZonesNeeded} />
+						</fieldset>
+						<h2>Advanced</h2>
+						<fieldset>
+							<label>Image Capture Size</label>
+							{this._renderImageCaptureSelect()}
 						</fieldset>
 					</form>
 				</div>

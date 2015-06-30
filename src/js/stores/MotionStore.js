@@ -14,7 +14,7 @@ let _data = {
 	motionZone: {top: 0, left: 0, width: 0, height: 0}   // used in debug mode to show what part of the frame we're detecting motion in
 };
 // delay for motion detected so if motion is sensed it will stay on for the duration of the delay
-let _motionDetectionDelay = 800;
+//let _motionDetectionDelay = 800;
 let _motionDetectionDelayTimeout = null;
 
 const MotionStore = assign({}, BaseStore, {
@@ -46,8 +46,15 @@ const MotionStore = assign({}, BaseStore, {
 				});
 				MotionStore.emitChange();
 				break;
+			/*
+				MOTION_DETECTED
+				this is a little confusing - if motion is detected we leave it active for a set
+				ammount of time. In doing this it makes the transition between motion and no motion smoother
+				instead of updating frequently on/off
+			*/
 			case Constants.ActionTypes.MOTION_DETECTED:
 				if(!_motionDetectionDelayTimeout) {
+					let _motionDetectionDelay = _data.armed ? 5000 : 800;   // here we increase the delay if the system is armed, this gives it more time to capture security breach images
 					_data = React.addons.update(_data, {
 						motionDetected: {$set: action.boolean}
 					});
