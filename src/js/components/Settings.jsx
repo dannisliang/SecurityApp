@@ -1,4 +1,5 @@
 import React from 'react/addons';
+import Tooltip from 'rc-tooltip';
 import SettingsActions from '../actions/SettingsActions';
 import SettingsStore from '../stores/SettingsStore';
 import Dispatcher from '../Dispatcher';
@@ -91,10 +92,12 @@ export default React.createClass({
 				</div>
 				<div id="settings-container">
 					<form>
-						<fieldset>
-							<label>Motion Sensitivity</label>
-							<input type="range" min="0" max="100" defaultValue={sensitivityPercent} onChange={this._handleChangeSensitivity} />
-						</fieldset>
+						<Tooltip placement="right" trigger={'hover'} overlay={<span>Tooltip</span>} renderPopupToBody={true} overlayStyle={{zIndex: 999999, height: 0}}>
+							<fieldset>
+								<label>Motion Sensitivity</label>
+								<input type="range" min="0" max="100" defaultValue={sensitivityPercent} onChange={this._handleChangeSensitivity} />
+							</fieldset>
+						</Tooltip>
 						<fieldset>
 							<label>Motion Grid Size</label>
 							<input type="range" min="10" max="100" defaultValue={this.state.motionZoneDensity} onChange={this._handleChangePixelDensity} />

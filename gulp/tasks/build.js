@@ -9,7 +9,7 @@ var config = require('../config');
 var errorHandler = config.errorHandler;
 config = config.build;
 
-gulp.task('build', ['clean', 'browserify', 'styles', 'iconfont'], function() {
+gulp.task('build', ['clean', 'browserify', 'styles'], function() {
 	gulp.src(config.src)
 		.pipe(connect.reload())
 		.on('error',errorHandler);

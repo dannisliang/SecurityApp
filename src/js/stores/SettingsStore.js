@@ -74,7 +74,6 @@ const SettingsStore = assign({}, BaseStore, {
 						break;
 					}
 				}
-				console.log(_data);
 				SettingsStore.emitChange();
 				break;
 		}
