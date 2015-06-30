@@ -1,0 +1,16 @@
+@import "compass/css3/transition";
+@import "compass/css3/box-shadow";
+@import "compass/css3/images";
+@import "compass/css3/transform";
+@import "./_common";
+
+.rc-tooltip {
+	z-index: 999;
+	.rc-tooltip-inner {
+		position: absolute;
+		background: rgba(0,0,0,0.6);
+	}
+	&.rc-tooltip-hidden {
+		display: none;
+	}
+}

@@ -1,24 +1,21 @@
 import React from 'react/addons';
-import Tooltip from 'rc-tooltip';
 import SettingsActions from '../actions/SettingsActions';
 import SettingsStore from '../stores/SettingsStore';
 import Dispatcher from '../Dispatcher';
 import Core from '../Core';
 import {navigate} from 'react-mini-router';
+import FieldsetMotionSensitivity from './forms/FieldsetMotionSensitivity.jsx';
+import FieldsetMotionDensity from './forms/FieldsetMotionDensity.jsx';
+import FieldsetFrameCaptureSpeed from './forms/FieldsetFrameCaptureSpeed.jsx';
+import FieldsetActiveZonesNeeded from './forms/FieldsetActiveZonesNeeded.jsx';
+import FieldsetImageCaptureSize from './forms/FieldsetImageCaptureSize.jsx';
 
 export default React.createClass({
 	// MIXINS /////////////////////////////
 	mixins: [React.addons.PureRenderMixin],
-	getDefaultProps: function() {
-		return {
-			minSensitivity: 25,
-			maxSensitivity: 195
-		};
-	},
 	// INITIAL STATE //////////////////////
 	getInitialState: function() {
 		return SettingsStore.getAll();
-		console.log(this.state);
 	},
 	// EVENTS /////////////////////////////
 	_onChange: function() {
@@ -32,53 +29,12 @@ export default React.createClass({
 		SettingsStore.removeChangeListener(this._onChange);
 	},
 	// USER INPUT EVENTS //////////////////
-	_handleChangeSensitivity: function(event) {
-		// this converts 0-100% to the actual sensitivity value
-		let sensitivity = (((100 - event.target.value) * (this.props.maxSensitivity - this.props.minSensitivity)) / 100) + this.props.minSensitivity;
-		SettingsActions.setSensitivity(sensitivity);
-	},
-	_handleChangeSustained: function(event) {
-		SettingsActions.setSustained(event.target.value);
-	},
-	_handleChangeFPS: function(event) {
-		SettingsActions.setFPS(event.target.value);
-	},
-	_handleChangePixelDensity: function(event) {
-		SettingsActions.setMotionZoneDensity(event.target.value);
-	},
-	_handleChangeActiveZonesNeeded: function(event) {
-		SettingsActions.setActiveZonesNeeded(event.target.value);
-	},
-	_handleImageCaptureSizeChange: function(event) {
-		SettingsActions.setImageCaptureSize(event.target.value);
-	},
 	_handleClose: function(event) {
 		event.preventDefault();
 		setTimeout(function() { navigate('/'); }, 0);
 	},
 	// RENDERING ////////////////////////
-	_renderImageCaptureSelect: function() {
-		let imageCaptureOptionComponents = [];
-		for(var i=0, l=this.state.imageCaptureSizes.length; i<l; i++) {
-			let imageCaptureSize = this.state.imageCaptureSizes[i],
-				label = Core.capitalize(imageCaptureSize.value) + ' (' + imageCaptureSize.width + 'x' + imageCaptureSize.height + ')';
-			imageCaptureOptionComponents.push(
-				<option value={imageCaptureSize.value} key={i}>
-					{label}
-				</option>
-			);
-		}
-		return (
-			<select value={this.state.imageCaptureSize.value} onChange={this._handleImageCaptureSizeChange}>
-				{imageCaptureOptionComponents}
-			</select>
-		);
-	},
 	render: function() {
-		// this takes the actual sensitivity val and converts it to 0-100% to be more clear to user
-		// TODO: all sliders should follow this principal
-		let sensitivityPercent = Math.round(100 - (((this.state.sensitivity - this.props.minSensitivity) * 100) / (this.props.maxSensitivity - this.props.minSensitivity)));
-		let motionDetected = this.props.motionDetected ? 'Motion detected' : 'All clear';
 		return (
 			<div id="settings-container" className="absolute">
 				<div id="settings-header">
@@ -92,29 +48,12 @@ export default React.createClass({
 				</div>
 				<div id="settings-container">
 					<form>
-						<Tooltip placement="right" trigger={'hover'} overlay={<span>Tooltip</span>} renderPopupToBody={true} overlayStyle={{zIndex: 999999, height: 0}}>
-							<fieldset>
-								<label>Motion Sensitivity</label>
-								<input type="range" min="0" max="100" defaultValue={sensitivityPercent} onChange={this._handleChangeSensitivity} />
-							</fieldset>
-						</Tooltip>
-						<fieldset>
-							<label>Motion Grid Size</label>
-							<input type="range" min="10" max="100" defaultValue={this.state.motionZoneDensity} onChange={this._handleChangePixelDensity} />
-						</fieldset>
-						<fieldset>
-							<label>Frame Capture Speed</label>
-							<input type="range" min="1" max="60" defaultValue={this.state.fps} onChange={this._handleChangeFPS} />
-						</fieldset>
-						<fieldset>
-							<label>Active Zones Needed</label>
-							<input type="range" min="1" max="100" defaultValue={this.state.activeZonesNeeded} onChange={this._handleChangeActiveZonesNeeded} />
-						</fieldset>
+						<FieldsetMotionSensitivity defaultValue={this.state.sensitivity} />
+						<FieldsetMotionDensity defaultValue={this.state.motionZoneDensity} />
+						<FieldsetFrameCaptureSpeed defaultValue={this.state.fps} />
+						<FieldsetActiveZonesNeeded defaultValue={this.state.activeZonesNeeded} />
 						<h2>Advanced</h2>
-						<fieldset>
-							<label>Image Capture Size</label>
-							{this._renderImageCaptureSelect()}
-						</fieldset>
+						<FieldsetImageCaptureSize defaultValue={this.state.imageCaptureSize.value} />
 					</form>
 				</div>
 			</div>

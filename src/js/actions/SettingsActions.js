@@ -38,10 +38,10 @@ export default {
 			number: number
 		});
 	},
-	setImageCaptureSize: function(string) {
+	setImageCaptureSize: function(object) {
 		Dispatcher.handleViewAction({
 			type   : Constants.ActionTypes.SET_IMAGE_CAPTURE_SIZE,
-			string : string
+			object : object
 		});
 	}
 };

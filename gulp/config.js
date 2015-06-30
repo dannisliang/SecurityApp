@@ -57,7 +57,7 @@ module.exports = {
 	},
 	watch: [
 		{
-			src   : src + '/js/**/*.{js,jsx}',
+			src   : src + '/js/**/*.*',
 			tasks : ['browserify']
 		},
 		{
