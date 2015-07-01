@@ -4,6 +4,7 @@ import SettingsStore from '../stores/SettingsStore';
 import Dispatcher from '../Dispatcher';
 import Core from '../Core';
 import {navigate} from 'react-mini-router';
+// TODO: get rid of all of these and move props into array to iterate from here
 import FieldsetMotionSensitivity from './forms/FieldsetMotionSensitivity.jsx';
 import FieldsetMotionDensity from './forms/FieldsetMotionDensity.jsx';
 import FieldsetFrameCaptureSpeed from './forms/FieldsetFrameCaptureSpeed.jsx';
