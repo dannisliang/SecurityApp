@@ -18,6 +18,24 @@ export default React.createClass({
 			reverse : false
 		};
 	},
+	// EVENTS /////////////////////////////
+	_handleChange: function(value) {
+		switch(this.props.type) {
+			case 'slider':
+				if(this.props.onChange) { this.props.onChange(value); }
+				break;
+			case 'select':
+				for(var i=0, l=this.props.options.length; i<l; i++) {
+					if(this.props.options[i].value === value) {
+						if(this.props.onChange) {
+							this.props.onChange(this.props.options[i]);
+						}
+						break;
+					}
+				}
+				break;
+		}
+	},
 	// PRIVATE METHODS ////////////////////
 	_convertValToPer: function(value) {
 		// sometimes we want to reverse values, for example the smaller the motion density value the more dense the zones are
@@ -48,20 +66,14 @@ export default React.createClass({
 				defaultValue : this.props.defaultValue
 			},
 			onChange = function(event) {
-				let value = this._convertPerToVal(event.target.value);
-				console.log(value);
-				if(this.props.onChange) {
-					this.props.onChange(value);
-				}
+				this._handleChange(this._convertPerToVal(event.target.value));
 			};
 		return <input {...sliderProps} onChange={onChange.bind(this)} defaultValue={this._convertValToPer(this.props.defaultValue)} />;
 	},
 	_renderSelect: function() {
 		let optionComponents = [],
 			onChange = function(event) {
-				if(this.props.onChange) {
-					this.props.onChange(event.target.value);
-				}
+				this._handleChange(event.target.value);
 			};
 		this.props.options.map(function(option, i){
 			optionComponents.push(
@@ -77,7 +89,7 @@ export default React.createClass({
 		);
 	},
 	render: function() {
-		//console.log('RENDER: '+this.props.label);
+		console.log('RENDER: '+this.props.label);
 		let inputComponent;
 		switch(this.props.type) {
 			case 'slider':
