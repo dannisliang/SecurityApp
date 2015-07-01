@@ -1,6 +1,5 @@
 import Dispatcher from '../Dispatcher';
 import Constants from '../Constants';
-import Core from '../Core';
 
 export default {
 	toggleDebug: function() {
@@ -39,6 +38,7 @@ export default {
 		});
 	},
 	setImageCaptureSize: function(object) {
+		console.log(object);
 		Dispatcher.handleViewAction({
 			type   : Constants.ActionTypes.SET_IMAGE_CAPTURE_SIZE,
 			object : object

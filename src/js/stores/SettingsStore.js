@@ -10,6 +10,7 @@ let _data = {
 	fpsInterval        : 55.555,    // 1000 / fps = fpsInterval (used to throttle RAF loop)
 	motionZoneDensity  : 35,        // it is too CPU intensive to compare every pixel in frame, so instead we use this (ex: 640 / 10)
 	activeZonesNeeded  : 10,
+	imageCaptureSizeValue: 'normal',
 	imageCaptureSize   : {value: 'normal', width: 640, height: 480}
 };
 // Register the store
@@ -69,6 +70,7 @@ const SettingsStore = assign({}, BaseStore, {
 				break;
 			case Constants.ActionTypes.SET_IMAGE_CAPTURE_SIZE:
 				SettingsStore._updateData({
+					imageCaptureSizeValue: {$set: action.object.value},
 					imageCaptureSize: {$set: action.object}
 				});
 				SettingsStore.emitChange();

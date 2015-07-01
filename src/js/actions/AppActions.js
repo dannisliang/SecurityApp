@@ -1,6 +1,5 @@
 import Dispatcher from '../Dispatcher';
 import Constants from '../Constants';
-import Core from '../Core';
 
 export default {
 	debug: function(boolean) {

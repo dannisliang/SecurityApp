@@ -1,4 +1,5 @@
 import React from 'react/addons';
+import Tooltip from 'rc-tooltip';
 
 export default React.createClass({
 	// MIXINS /////////////////////////////
@@ -89,6 +90,8 @@ export default React.createClass({
 		);
 	},
 	render: function() {
+		console.log('RENDAR: '+this.props.label);
+		console.log(this.props.tooltip);
 		let inputComponent;
 		switch(this.props.type) {
 			case 'slider':
@@ -99,10 +102,12 @@ export default React.createClass({
 				break;
 		}
 		return (
-			<fieldset>
-				<label>{this.props.label}</label>
-				{inputComponent}
-			</fieldset>
+			<Tooltip {...this.props.tooltip}>
+				<fieldset>
+					<label>{this.props.label}</label>
+					{inputComponent}
+				</fieldset>
+			</Tooltip>
 		);
 	},
 });

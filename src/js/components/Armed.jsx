@@ -5,7 +5,6 @@ import DropboxActions from '../actions/DropboxActions';
 import MotionStore from '../stores/MotionStore';
 import SettingsStore from '../stores/SettingsStore';
 import assign from 'object-assign';
-import Core from '../Core';
 
 export default React.createClass({
 	mixins: [React.addons.PureRenderMixin],

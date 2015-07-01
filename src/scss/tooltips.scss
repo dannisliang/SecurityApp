@@ -1,16 +1,86 @@
 @import "compass/css3/transition";
+@import "compass/css3/animation";
 @import "compass/css3/box-shadow";
 @import "compass/css3/images";
 @import "compass/css3/transform";
 @import "./_common";
 
-.rc-tooltip {
+$arrow-size: 15px;
+$tip-color: rgba(255, 255, 255, 0.5);
+@include keyframes(tooltipEnter) {
+	0% {
+		@include rotateY(90deg);
+	}
+	100% {
+		@include rotateY(0deg);
+	}
+}
+@include keyframes(tooltipLeave) {
+	0% {
+		opacity: 1;
+		@include scale(1,1);
+	}
+	100% {
+		opacity: 0;
+		@include scale(0,1);
+	}
+}
+
+.rc-wrapper {
+	@include perspective(1500px);
+	@include perspective-origin(500px 50%);
+	position: relative;
 	z-index: 999;
+}
+.rc-tooltip {
+	@include transform-origin(0, 50%);
+	position: absolute;
+	max-width: 250px;
 	.rc-tooltip-inner {
-		position: absolute;
-		background: rgba(0,0,0,0.6);
+		position: relative;
+		left: $arrow-size;
+		background: $tip-color;
+		color: $dark-gray;
+		padding: 20px;
+		font-size: 12px;
 	}
-	&.rc-tooltip-hidden {
-		display: none;
+	h3 {
+		margin: 0;
 	}
+}
+.rc-tooltip-hidden {
+	display: none;
+}
+.rc-tooltip-arrow {
+	position: absolute;
+	width: 0;
+	height: 0;
+	border-color: transparent;
+	border-style: solid;
+	top: 50%;
+	left: 0;
+	margin-top: -$arrow-size;
+	border-width: $arrow-size $arrow-size $arrow-size 0;
+	border-right-color: $tip-color;
+}
+.tooltip-enter {
+	@include rotateY(90deg);
+	@include animation-duration(0.2s);
+	@include animation-fill-mode(both);
+	@include animation-timing-function($ease-out-quad);
+	@include animation-play-state(paused);
+}
+.tooltip-leave {
+	@include animation-duration(0.5s);
+	@include animation-fill-mode(both);
+	@include animation-timing-function($ease-out-quad);
+	@include animation-play-state(paused);
+}
+.tooltip-enter.tooltip-enter-active {
+	@include animation-name(tooltipEnter);
+	@include animation-play-state(running);
+}
+.tooltip-leave.tooltip-leave-active {
+	@include animation-name(tooltipLeave);
+	@include animation-play-state(running);
 }

@@ -1,6 +1,6 @@
 import Dispatcher from '../Dispatcher';
 import Constants from '../Constants';
-import Core from '../Core';
+import GetWebcamSrc from '../utils/GetWebcamSrc';
 
 export default {
 	addVideoSrc: function() {
@@ -17,7 +17,7 @@ export default {
 					type: Constants.ActionTypes.ADD_VIDEO_SRC_ERROR
 				});
 			};
-		Core.getWebcamSrc(onSuccess, onError);
+		GetWebcamSrc(onSuccess, onError);
 	},
 	play: function() {
 		Dispatcher.handleViewAction({
