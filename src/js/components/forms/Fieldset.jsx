@@ -89,7 +89,6 @@ export default React.createClass({
 		);
 	},
 	render: function() {
-		console.log('RENDER: '+this.props.label);
 		let inputComponent;
 		switch(this.props.type) {
 			case 'slider':
