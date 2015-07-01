@@ -43,16 +43,5 @@ export default React.createClass({
 				SettingsActions.setImageCaptureSize(value);
 			}
 		};
-	},
-	// EVENTS /////////////////////////////
-	/*_handleChange: function(value) {
-		var option;
-		for(var i=0, l=this.props.options.length; i<l; i++) {
-			if(this.props.options[i].value === value) {
-				option = this.props.options[i];
-				break;
-			}
-		}
-		SettingsActions.setImageCaptureSize(option);
-	}*/
+	}
 });
